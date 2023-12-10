@@ -10,10 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'registerOwner':
             registerOwner();
             break;
-        case 'loginOwner':
-            loginOwner();
-            break;
 
+        case 'addPropertyRequest':
+            addPropertyRequest();
+            break;
         default:
             $res = [
                 'status' => 400,
@@ -80,25 +80,54 @@ function registerOwner()
         mysqli_stmt_close($emailCheck);
     }
 }
-function loginOwner                                                                                                                                                                              (){
+function addPropertyRequest()
+{
+    // Get the request data
     global $db;
-    $email = mysqli_real_escape_string($db, $_POST['email']);
-    $password = mysqli_real_escape_string($db, $_POST['password']);
-    $emailCheckQuery = "SELECT * FROM owner WHERE email = ?";
-    $emailCheck = mysqli_prepare($db, $emailCheckQuery);
-    mysqli_stmt_bind_param($emailCheck, 's', $email);
-    mysqli_stmt_execute($emailCheck);
-    $resultCheckEmail = mysqli_stmt_get_result($emailCheck);
-    if (mysqli_num_rows($resultCheckEmail) == 0) {
-        // Email already exists
+    $owner_id = $_SESSION['owner_id'];
+    $property_name = mysqli_real_escape_string($db, $_POST['property_name']);
+    $address_line = mysqli_real_escape_string($db, $_POST['address_line']);
+    $country = mysqli_real_escape_string($db, $_POST['country']);
+    $state = mysqli_real_escape_string($db, $_POST['state']);
+    $city = mysqli_real_escape_string($db, $_POST['city']);
+    $postalZip = mysqli_real_escape_string($db, $_POST['postalZip']);
+    $location = mysqli_real_escape_string($db, $_POST['location']);
+    $facilities = mysqli_real_escape_string($db, $_POST['facilities']);
+    // Insert query
+    $addPropertyQuery = "INSERT INTO property (owner_id, property_name,
+    address_line, country, state, city, postalZip, location, facilities) VALUES (
+        ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $addProperty = mysqli_prepare($db, $addPropertyQuery);
+    mysqli_stmt_bind_param(
+        $addProperty,
+        'sssssssss',
+        $owner_id,
+        $property_name,
+        $address_line,
+        $country,
+        $state,
+        $city,
+        $postalZip,
+        $location,
+        $facilities
+    );
+    if (mysqli_stmt_execute($addProperty)) {
+        // Registration successful
         $response = [
-            'status' => 404,
-            'message' => 'User not found, please register'
+            'status' => 200,
+            'message' => 'Property added successfully.'
         ];
         echo json_encode($response);
+        return;
+    } else {
+        // Registration failed
+        $response = [
+            'status' => 500,
+            'message' => 'Property addition failed. Please try again later.'
+        ];
+        echo json_encode($response);
+        return;
     }
-    else{
-
-
-    }
+    // Close the statement 
+    mysqli_stmt_close($addProperty);
 }

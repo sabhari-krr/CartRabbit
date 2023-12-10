@@ -15,10 +15,58 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Custom js -->
     <script src="js/actions.js"></script>
+    <!-- Country States js -->
+    <script src="js/country-states.js"></script>
+
 </head>
 
 <body class="container">
-<p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, dolorum.</p>
+    <div class="addProperty bg-dark-subtle p-3">
+        <form id="add_property_form">
+            <div class="mb-3">
+                <label for="property_name" class="form-label">Property Name</label>
+                <input type="text" class="form-control" name="property_name" required placeholder="Stanza Living" />
+            </div>
+            <div class="mb-3">
+                <label for="address_line" class="form-label">Address Line</label>
+                <input type="text" class="form-control" name="address_line" required
+                    placeholder="150, Periyar Nagar, Peelamedu" />
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <select name="country" class="countries form-control" id="countryId">
+                    <option value="">Select Country</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="state" class="form-label">State</label>
+                <select name="state" class="states form-control" id="stateId">
+                    <option value="">Select State</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <select name="city" class="cities form-control" id="cityId">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="postalZip" class="form-label">Postal Zip</label>
+                <input type="number" class="form-control" name="postalZip" />
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">Location(Map Link)</label>
+                <input type="text" class="form-control" name="location" />
+            </div>
+            <div class="mb-3">
+                <label for="facilities" class="form-label">Facilities(Comma Separated Values)</label>
+                <input type="text" class="form-control" name="facilities" required
+                    placeholder="Free Wifi, CCTV Surviellance" />
+            </div>
+            <button type="submit" class="btn btn-success">Add Property</button>
+
+        </form>
+    </div>
 </body>
 
 </html>

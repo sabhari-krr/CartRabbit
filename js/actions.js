@@ -34,6 +34,7 @@ $(document).ready(function () {
         if (res.status == 200) {
           alert(res.message);
           window.location.href = "dashboard.html";
+          console.log(res);
         } else if (res.status == 401) {
           alert(res.message);
         } else {
@@ -67,5 +68,26 @@ $(document).ready(function () {
       },
     });
   });
- 
+  // Propertry Registration Form
+  $("#add_property_form").submit(function (event) {
+    event.preventDefault();
+    console.log("Came inside jquery");
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php", // Replace with your backend endpoint
+      data: $(this).serialize() + "&action=addPropertyRequest",
+      success: function (response) {
+        var res = JSON.parse(response);
+        $("#add_property_form")[0].reset();
+        if (res.status == 200) {
+          alert(res.message);
+        } else {
+          alert("Error: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  });
 });

@@ -52,9 +52,12 @@ function loginOwner()
         $hashedPassword = $user['password'];
         if (password_verify($password, $hashedPassword)) {
             // Passwords match, login successful
+            // Set user ID in the session
+            $_SESSION['owner_id'] = $user['id'];
             $response = [
                 'status' => 200,
-                'message' => 'Login successful.'
+                'message' => 'Login successful.....',
+                'owner_id' => $user['id']
                 // Add additional data if needed
             ];
             echo json_encode($response);
