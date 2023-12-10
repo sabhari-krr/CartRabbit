@@ -21,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'deleteProperty':
             deleteProperty();
             break;
+        case 'getPropertyDetails':
+            getPropertyDetails();
+            break;
+        case 'updateProperty':
+            updateProperty();
+            break;
         default:
             $res = [
                 'status' => 400,
@@ -237,4 +243,86 @@ function deleteProperty()
 
     // Close the statement
     mysqli_stmt_close($checkOwnership);
+}
+function getPropertyDetails()
+{
+    global $db;
+    $house_id = $_POST['house_id'];
+
+    // Select query to retrieve property details
+    $getPropertyQuery = "SELECT * FROM property WHERE house_id = ?";
+    $getProperty = mysqli_prepare($db, $getPropertyQuery);
+    mysqli_stmt_bind_param($getProperty, 's', $house_id);
+
+    if (mysqli_stmt_execute($getProperty)) {
+        $result = mysqli_stmt_get_result($getProperty);
+
+        if ($property = mysqli_fetch_assoc($result)) {
+            // Property details retrieved successfully
+            $response = [
+                'status' => 200,
+                'message' => 'Property details fetched successfully.',
+                'data' => $property
+            ];
+            echo json_encode($response);
+        } else {
+            // Property not found
+            $response = [
+                'status' => 404,
+                'message' => 'Property not found.'
+            ];
+            echo json_encode($response);
+        }
+    } else {
+        // Error fetching property details
+        $response = [
+            'status' => 500,
+            'message' => 'Error fetching property details. Please try again later.'
+        ];
+        echo json_encode($response);
+    }
+
+    // Close the statement
+    mysqli_stmt_close($getProperty);
+}
+function updateProperty()
+{
+    global $db;
+    $house_id = mysqli_real_escape_string($db, $_POST['house_id']);
+    $property_name = mysqli_real_escape_string($db, $_POST['property_name']);
+    $address_line = mysqli_real_escape_string($db, $_POST['address_line']);
+    $country = mysqli_real_escape_string($db, $_POST['country']);
+    $state = mysqli_real_escape_string($db, $_POST['state']);
+    $city = mysqli_real_escape_string($db, $_POST['city']);
+    $postalZip = mysqli_real_escape_string($db, $_POST['postalZip']);
+    $location = mysqli_real_escape_string($db, $_POST['location']);
+    $facilities = mysqli_real_escape_string($db, $_POST['facilities']);
+
+    // Update query
+    $updatePropertyQuery = "UPDATE property SET 
+        property_name = '$property_name',
+        address_line = '$address_line',
+        country = '$country',
+        state = '$state',
+        city = '$city',
+        postalZip = '$postalZip',
+        location = '$location',
+        facilities = '$facilities'
+        WHERE house_id = '$house_id'";
+
+    if (mysqli_query($db, $updatePropertyQuery)) {
+        // Update successful
+        $response = [
+            'status' => 200,
+            'message' => 'Property updated successfully.'
+        ];
+        echo json_encode($response);
+    } else {
+        // Update failed
+        $response = [
+            'status' => 500,
+            'message' => 'Property update failed. Please try again later.'
+        ];
+        echo json_encode($response);
+    }
 }

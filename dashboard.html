@@ -21,6 +21,64 @@
 </head>
 
 <body class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Property</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit_property_form">
+                        <input type="hidden" class="form-control" name="house_id" />
+                        <div class="mb-3">
+                            <label for="property_name" class="form-label">Property Name</label>
+                            <input type="text" class="form-control" name="property_name" placeholder="Stanza Living" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="address_line" class="form-label">Address Line</label>
+                            <input type="text" class="form-control" name="address_line"
+                                placeholder="150, Periyar Nagar, Peelamedu" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" name="country" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control" name="state" />
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" name="city" />
+
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="postalZip" class="form-label">Postal Zip</label>
+                            <input type="number" class="form-control" name="postalZip" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location(Map Link)</label>
+                            <input type="text" class="form-control" name="location" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="facilities" class="form-label">Facilities(Comma Separated Values)</label>
+                            <input type="text" class="form-control" name="facilities"
+                                placeholder="Free Wifi, CCTV Surviellance" />
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Add Property -->
     <div class="addProperty bg-dark-subtle p-3">
         <h2 class="text-center">Property Registration Form</h2>

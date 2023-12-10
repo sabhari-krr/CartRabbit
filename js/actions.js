@@ -3,7 +3,7 @@ $(document).ready(function () {
     event.preventDefault();
     $.ajax({
       type: "POST",
-      url: "php/actions.php", // Replace with your backend endpoint
+      url: "php/actions.php",
       data: $(this).serialize() + "&action=registerOwner",
       success: function (response) {
         var res = JSON.parse(response);
@@ -26,7 +26,7 @@ $(document).ready(function () {
     event.preventDefault();
     $.ajax({
       type: "POST",
-      url: "php/authentication.php", // Replace with your backend endpoint
+      url: "php/authentication.php",
       data: $(this).serialize() + "&action=loginOwner",
       success: function (response) {
         var res = JSON.parse(response);
@@ -52,7 +52,7 @@ $(document).ready(function () {
     console.log("Came inside jquery");
     $.ajax({
       type: "POST",
-      url: "php/authentication.php", // Replace with your backend endpoint
+      url: "php/authentication.php",
       data: $(this).serialize() + "&action=resetPasswordRequest",
       success: function (response) {
         var res = JSON.parse(response);
@@ -74,7 +74,7 @@ $(document).ready(function () {
     console.log("Came inside jquery");
     $.ajax({
       type: "POST",
-      url: "php/actions.php", // Replace with your backend endpoint
+      url: "php/actions.php",
       data: $(this).serialize() + "&action=addPropertyRequest",
       success: function (response) {
         var res = JSON.parse(response);
@@ -158,7 +158,7 @@ $(document).ready(function () {
                             <p class="card-text">${property.city}</p>
                             <p class="card-text">${property.postalZip}</p>
                             <p class="card-text">${badgesHtml}</p>
-              <button class="btn btn-outline-primary" onclick="editProperty(${property.house_id})">Edit</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${property.house_id})">Edit</button>
 
                             <button class="btn btn-outline-danger" onclick="confirmDelete(${property.house_id})">Delete</button>
                         </div>
@@ -177,7 +177,37 @@ $(document).ready(function () {
     var messageHtml = `<p class="lead text-center">No properties available</p>`;
     container.append(messageHtml);
   }
+  // Save changes button inside the modal
+  $("#staticBackdrop").on("hidden.bs.modal", function () {
+    // Clear the form when the modal is closed
+    $("#edit_property_form")[0].reset();
+  });
+
+  $("#edit_property_form").submit(function (event) {
+    event.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php",
+      data: $(this).serialize() + "&action=updateProperty",
+      success: function (response) {
+        var res = JSON.parse(response);
+
+        if (res.status == 200) {
+          alert(res.message);
+          // Refresh the displayed properties after updating
+          $("#displayPropertiesBtn").trigger("click");
+        } else {
+          alert("Error: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  });
 });
+//outside document ready
 function confirmDelete(houseId) {
   if (confirm("Are you sure you want to delete this property?")) {
     // If the user confirms, delete the property
@@ -188,7 +218,7 @@ function confirmDelete(houseId) {
 function deleteProperty(houseId) {
   $.ajax({
     type: "POST",
-    url: "php/actions.php", // Replace with your backend endpoint
+    url: "php/actions.php",
     data: { action: "deleteProperty", house_id: houseId },
     success: function (response) {
       var res = JSON.parse(response);
@@ -205,7 +235,42 @@ function deleteProperty(houseId) {
     },
   });
 }
-function editProperty(propertyId) {
-  // Display a greeting message
-  alert(`Hello! Editing property with ID: ${propertyId}`);
+
+function editProperty(houseId) {
+  // Fetch property details using AJAX
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php",
+    data: { action: "getPropertyDetails", house_id: houseId },
+    success: function (response) {
+      var res = JSON.parse(response);
+      if (res.status === 200) {
+        var property = res.data;
+        console.log("Property data from API:", property); // debug ku
+        $("#edit_property_form input[name='house_id']").val(property.house_id);
+        $("#edit_property_form input[name='property_name']").val(
+          property.property_name
+        );
+        $("#edit_property_form input[name='address_line']").val(
+          property.address_line
+        );
+        $("#edit_property_form input[name='country']").val(property.country);
+        $("#edit_property_form input[name='state']").val(property.state);
+        $("#edit_property_form input[name='city']").val(property.city);
+        $("#edit_property_form input[name='postalZip']").val(
+          property.postalZip
+        );
+        $("#edit_property_form input[name='location']").val(property.location);
+        $("#edit_property_form input[name='facilities']").val(
+          property.facilities
+        );
+        $("#staticBackdrop").modal("show");
+      } else {
+        alert("Error fetching property details: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error("Error fetching property details:", error);
+    },
+  });
 }
