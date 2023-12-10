@@ -18,6 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'displayProperty':
             displayProperty();
             break;
+        case 'deleteProperty':
+            deleteProperty();
+            break;
+
         default:
             $res = [
                 'status' => 400,
@@ -175,4 +179,63 @@ function displayProperty()
     }
     // Close the statement
     mysqli_stmt_close($stmt);
+}
+// Deletion of property
+function deleteProperty()
+{
+    global $db;
+    $owner_id = $_SESSION['owner_id'];
+    $house_id = $_POST['house_id'];
+
+    // Check if the property belongs to the logged-in owner
+    $checkOwnershipQuery = "SELECT * FROM property WHERE owner_id = ? AND house_id = ?";
+    $checkOwnership = mysqli_prepare($db, $checkOwnershipQuery);
+    mysqli_stmt_bind_param($checkOwnership, 'ss', $owner_id, $house_id);
+
+    if (mysqli_stmt_execute($checkOwnership)) {
+        $result = mysqli_stmt_get_result($checkOwnership);
+
+        if (mysqli_num_rows($result) > 0) {
+            // Property belongs to the owner, proceed with deletion
+            $deletePropertyQuery = "DELETE FROM property WHERE house_id = ?";
+            $deleteProperty = mysqli_prepare($db, $deletePropertyQuery);
+            mysqli_stmt_bind_param($deleteProperty, 's', $house_id);
+
+            if (mysqli_stmt_execute($deleteProperty)) {
+                // Deletion successful
+                $response = [
+                    'status' => 200,
+                    'message' => 'Property deleted successfully.'
+                ];
+                echo json_encode($response);
+            } else {
+                // Deletion failed
+                $response = [
+                    'status' => 500,
+                    'message' => 'Property deletion failed. Please try again later.'
+                ];
+                echo json_encode($response);
+            }
+
+            // Close the statement
+            mysqli_stmt_close($deleteProperty);
+        } else {
+            // Property doesn't belong to the owner
+            $response = [
+                'status' => 403,
+                'message' => 'You do not have permission to delete this property.'
+            ];
+            echo json_encode($response);
+        }
+    } else {
+        // Error checking ownership
+        $response = [
+            'status' => 500,
+            'message' => 'Error checking property ownership. Please try again later.'
+        ];
+        echo json_encode($response);
+    }
+
+    // Close the statement
+    mysqli_stmt_close($checkOwnership);
 }

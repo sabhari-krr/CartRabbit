@@ -112,11 +112,13 @@ $(document).ready(function () {
       },
     });
   });
+
   // function fetchProperties() {
   //   $.ajax({
   //     url: "php/actions.php",
   //     type: "GET",
   //     dataType: "json",
+  //     data: { action: "displayProperty" },
   //     success: function (response) {
   //       if (response.status === 200) {
   //         // Properties fetched successfully
@@ -149,14 +151,14 @@ $(document).ready(function () {
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">${property.property_name}</h5>
+                            <p class="card-text">Property ID is${property.house_id}</p>
                             <p class="card-text">${property.address_line}</p>
                             <p class="card-text">${property.country}</p>
                             <p class="card-text">${property.state}</p>
                             <p class="card-text">${property.city}</p>
                             <p class="card-text">${property.postalZip}</p>
                             <p class="card-text">${badgesHtml}</p>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="populateEditForm(${property.id})">Edit</button>
-            <button class="btn btn-danger" onclick="confirmDelete(${property.id})">Delete</button>
+                            <button class="btn btn-outline-danger" onclick="confirmDelete(${property.house_id})">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -166,3 +168,30 @@ $(document).ready(function () {
     });
   }
 });
+function confirmDelete(houseId) {
+  if (confirm("Are you sure you want to delete this property?")) {
+    // If the user confirms, delete the property
+    deleteProperty(houseId);
+  }
+}
+
+function deleteProperty(houseId) {
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php", // Replace with your backend endpoint
+    data: { action: "deleteProperty", house_id: houseId },
+    success: function (response) {
+      var res = JSON.parse(response);
+      if (res.status == 200) {
+        alert(res.message);
+        // Refresh the displayed properties after deletion
+        displayPropertyCards();
+      } else {
+        alert("Error: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error(error);
+    },
+  });
+}
