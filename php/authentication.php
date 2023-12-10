@@ -13,12 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'resetPasswordRequest':
             resetPasswordRequest();
             break;
-            // case 'resetPassword':
-            //     resetPassword();
-            //     break;
-            // case 'logout':
-            //     logout();
-            //     break;
+
+        case 'logout':
+            logout();
+            break;
 
         default:
             $res = [
@@ -183,4 +181,14 @@ EOT;
 
     // Close the statement
     mysqli_stmt_close($hashgenStatement);
+}
+function logout()
+{
+    session_destroy();
+    // Return a response
+    $response = [
+        'status' => 200,
+        'message' => 'Logout successful.'
+    ];
+    echo json_encode($response);
 }

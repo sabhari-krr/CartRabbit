@@ -68,6 +68,26 @@ $(document).ready(function () {
       },
     });
   });
+  // Lotout Ajax
+  $("#logoutButton").click(function () {
+    $.ajax({
+      type: "POST",
+      url: "php/authentication.php",
+      data: { action: "logout" },
+      success: function (response) {
+        var res = JSON.parse(response);
+        if (res.status == 200) {
+          alert(res.message);
+          window.location.href = "index.html"; 
+        } else {
+          alert("Error: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  });
   // Propertry Registration Form
   $("#add_property_form").submit(function (event) {
     event.preventDefault();
@@ -78,9 +98,11 @@ $(document).ready(function () {
       data: $(this).serialize() + "&action=addPropertyRequest",
       success: function (response) {
         var res = JSON.parse(response);
-        $("#add_property_form")[0].reset();
         if (res.status == 200) {
+          $("#add_property_form")[0].reset();
           alert(res.message);
+          // Refresh the displayed properties after updating
+          $("#displayPropertiesBtn").trigger("click");
         } else {
           alert("Error: " + res.message);
         }
@@ -224,8 +246,8 @@ function deleteProperty(houseId) {
       var res = JSON.parse(response);
       if (res.status == 200) {
         alert(res.message);
-        // Refresh the displayed properties after deletion
-        displayPropertyCards();
+        // Refresh the displayed properties after updating
+        $("#displayPropertiesBtn").trigger("click");
       } else {
         alert("Error: " + res.message);
       }
