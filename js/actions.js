@@ -91,31 +91,14 @@ $(document).ready(function () {
     });
   });
   // Propertry Showcase part
- $("#displayPropertiesBtn").click(function () {
-   // Send an AJAX request to fetch and display properties
-   $.ajax({
-     url: "php/actions.php",
-     type: "POST",
-     dataType: "json",
-     data: { action: "displayProperty" },
-     success: function (response) {
-       if (response.status === 200) {
-         // Properties fetched successfully
-         displayPropertyCards(response.data);
-       } else {
-         console.error(response.message);
-       }
-     },
-     error: function (error) {
-       console.error("Error fetching properties:", error);
-     },
-   });
- });
-  function fetchProperties() {
+  // fetchProperties();
+  $("#displayPropertiesBtn").click(function () {
+    // Send an AJAX request to fetch and display properties
     $.ajax({
       url: "php/actions.php",
-      type: "GET",
+      type: "POST",
       dataType: "json",
+      data: { action: "displayProperty" },
       success: function (response) {
         if (response.status === 200) {
           // Properties fetched successfully
@@ -128,7 +111,25 @@ $(document).ready(function () {
         console.error("Error fetching properties:", error);
       },
     });
-  }
+  });
+  // function fetchProperties() {
+  //   $.ajax({
+  //     url: "php/actions.php",
+  //     type: "GET",
+  //     dataType: "json",
+  //     success: function (response) {
+  //       if (response.status === 200) {
+  //         // Properties fetched successfully
+  //         displayPropertyCards(response.data);
+  //       } else {
+  //         console.error(response.message);
+  //       }
+  //     },
+  //     error: function (error) {
+  //       console.error("Error fetching properties:", error);
+  //     },
+  //   });
+  // }
 
   function displayPropertyCards(properties) {
     var container = $("#propertyContainer");
@@ -140,8 +141,9 @@ $(document).ready(function () {
         .map(
           (facility) =>
             `<span class="badge bg-secondary">${facility.trim()}</span>`
-        ).join(" ");
-        // console.log(badgesHtml);
+        )
+        .join(" ");
+      // console.log(badgesHtml);
       var cardHtml = `
                 <div class="col-md-4 mb-4">
                     <div class="card">
@@ -153,6 +155,8 @@ $(document).ready(function () {
                             <p class="card-text">${property.city}</p>
                             <p class="card-text">${property.postalZip}</p>
                             <p class="card-text">${badgesHtml}</p>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="populateEditForm(${property.id})">Edit</button>
+            <button class="btn btn-danger" onclick="confirmDelete(${property.id})">Delete</button>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
             addPropertyRequest();
             break;
 
-        case 'displayProperty';
+        case 'displayProperty':
             displayProperty();
             break;
         default:
