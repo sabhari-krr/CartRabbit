@@ -91,8 +91,26 @@ $(document).ready(function () {
     });
   });
   // Propertry Showcase part
-  fetchProperties();
-
+ $("#displayPropertiesBtn").click(function () {
+   // Send an AJAX request to fetch and display properties
+   $.ajax({
+     url: "php/actions.php",
+     type: "POST",
+     dataType: "json",
+     data: { action: "displayProperty" },
+     success: function (response) {
+       if (response.status === 200) {
+         // Properties fetched successfully
+         displayPropertyCards(response.data);
+       } else {
+         console.error(response.message);
+       }
+     },
+     error: function (error) {
+       console.error("Error fetching properties:", error);
+     },
+   });
+ });
   function fetchProperties() {
     $.ajax({
       url: "php/actions.php",

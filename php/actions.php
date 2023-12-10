@@ -122,7 +122,7 @@ function addPropertyRequest()
             'message' => 'Property added successfully.'
         ];
         echo json_encode($response);
-        return;
+        // return;
     } else {
         // Registration failed
         $response = [
@@ -135,8 +135,8 @@ function addPropertyRequest()
     // Close the statement 
     mysqli_stmt_close($addProperty);
 }
-// Need to call this in html for displaying the properties for now called manually
-displayProperty();
+// Need to call this in html for displaying the properties as of now called manually
+// displayProperty();
 function displayProperty()
 {
     global $db;
