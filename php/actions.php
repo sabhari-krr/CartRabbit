@@ -21,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'deleteProperty':
             deleteProperty();
             break;
-
         default:
             $res = [
                 'status' => 400,

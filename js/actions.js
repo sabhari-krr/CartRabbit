@@ -104,7 +104,7 @@ $(document).ready(function () {
           // Properties fetched successfully
           displayPropertyCards(response.data);
         } else {
-          console.error(response.message);
+          displayNoPropertiesMessage();
         }
       },
       error: function (error) {
@@ -158,6 +158,8 @@ $(document).ready(function () {
                             <p class="card-text">${property.city}</p>
                             <p class="card-text">${property.postalZip}</p>
                             <p class="card-text">${badgesHtml}</p>
+              <button class="btn btn-outline-primary" onclick="editProperty(${property.house_id})">Edit</button>
+
                             <button class="btn btn-outline-danger" onclick="confirmDelete(${property.house_id})">Delete</button>
                         </div>
                     </div>
@@ -166,6 +168,14 @@ $(document).ready(function () {
 
       container.append(cardHtml);
     });
+  }
+  // Function to display a message when no properties are found
+  function displayNoPropertiesMessage() {
+    var container = $("#propertyContainer");
+    container.empty();
+
+    var messageHtml = `<p class="lead text-center">No properties available</p>`;
+    container.append(messageHtml);
   }
 });
 function confirmDelete(houseId) {
@@ -194,4 +204,8 @@ function deleteProperty(houseId) {
       console.error(error);
     },
   });
+}
+function editProperty(propertyId) {
+  // Display a greeting message
+  alert(`Hello! Editing property with ID: ${propertyId}`);
 }
