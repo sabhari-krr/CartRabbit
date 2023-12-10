@@ -21,7 +21,9 @@
 </head>
 
 <body class="container">
+    <!-- Add Property -->
     <div class="addProperty bg-dark-subtle p-3">
+        <h2 class="text-center">Property Registration Form</h2>
         <form id="add_property_form">
             <div class="mb-3">
                 <label for="property_name" class="form-label">Property Name</label>
@@ -64,6 +66,20 @@
                     placeholder="Free Wifi, CCTV Surviellance" />
             </div>
             <button type="submit" class="btn btn-success">Add Property</button>
+
+        </form>
+    </div>
+    <!-- Display Property -->
+    <div class="displayProperty p-3 bg-warning-subtle">
+        <h2 class="text-center">Property Showcase</h2>
+        <div id="propertyContainer" class="row mt-3">
+            <!-- Property cards will be displayed here -->
+        </div>
+    </div>
+    <!-- Edit Property -->
+    <div class="editProperty p-3 bg-warning-subtle">
+        <h2 class="text-center">Edit Property</h2>
+        <form id="editPropertyForm">
 
         </form>
     </div>

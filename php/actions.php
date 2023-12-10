@@ -14,6 +14,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'addPropertyRequest':
             addPropertyRequest();
             break;
+
+        case 'displayProperty';
+            displayProperty();
+            break;
         default:
             $res = [
                 'status' => 400,
@@ -130,4 +134,45 @@ function addPropertyRequest()
     }
     // Close the statement 
     mysqli_stmt_close($addProperty);
+}
+// Need to call this in html for displaying the properties for now called manually
+displayProperty();
+function displayProperty()
+{
+    global $db;
+    $owner_id = $_SESSION['owner_id'];
+    $query = "SELECT * FROM property WHERE owner_id = ?";
+    $stmt = mysqli_prepare($db, $query);
+    mysqli_stmt_bind_param($stmt, 's', $owner_id);
+    if (mysqli_stmt_execute($stmt)) {
+        $result = mysqli_stmt_get_result($stmt);
+        if (mysqli_num_rows($result) > 0) {
+            $response = [
+                'status' => 200,
+                'message' => 'Property fetched successfully.',
+                'data' => mysqli_fetch_all(
+                    $result,
+                    MYSQLI_ASSOC
+                )
+            ];
+            echo json_encode($response);
+            return;
+        } else {
+            $response = [
+                'status' => 404,
+                'message' => 'No property found.'
+            ];
+            echo json_encode($response);
+            return;
+        }
+    } else {
+        $response = [
+            'status' => 500,
+            'message' => 'Property fetch failed. Please try again later.'
+        ];
+        echo json_encode($response);
+        return;
+    }
+    // Close the statement
+    mysqli_stmt_close($stmt);
 }

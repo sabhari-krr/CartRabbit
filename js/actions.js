@@ -90,4 +90,57 @@ $(document).ready(function () {
       },
     });
   });
+  // Propertry Showcase part
+  fetchProperties();
+
+  function fetchProperties() {
+    $.ajax({
+      url: "php/actions.php",
+      type: "GET",
+      dataType: "json",
+      success: function (response) {
+        if (response.status === 200) {
+          // Properties fetched successfully
+          displayPropertyCards(response.data);
+        } else {
+          console.error(response.message);
+        }
+      },
+      error: function (error) {
+        console.error("Error fetching properties:", error);
+      },
+    });
+  }
+
+  function displayPropertyCards(properties) {
+    var container = $("#propertyContainer");
+    container.empty();
+
+    properties.forEach(function (property) {
+      var facilities = property.facilities.split(",");
+      var badgesHtml = facilities
+        .map(
+          (facility) =>
+            `<span class="badge bg-secondary">${facility.trim()}</span>`
+        ).join(" ");
+        // console.log(badgesHtml);
+      var cardHtml = `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${property.property_name}</h5>
+                            <p class="card-text">${property.address_line}</p>
+                            <p class="card-text">${property.country}</p>
+                            <p class="card-text">${property.state}</p>
+                            <p class="card-text">${property.city}</p>
+                            <p class="card-text">${property.postalZip}</p>
+                            <p class="card-text">${badgesHtml}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+      container.append(cardHtml);
+    });
+  }
 });
