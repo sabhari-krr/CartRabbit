@@ -153,7 +153,56 @@
     </div>
 
 
+    <div class="room_add_form bg-body-secondary p-3">
+        <form id="room_add_form">
+            <h2 class="text-center">Room Adding</h2>
+            <div class="mb-3">
+                <label for="property_name" class="form-label">Select Property</label>
+                <select class="form-control" name="property_name" id="property_name" required>
+                    <!-- Options will be dynamically populated using JavaScript -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="room_name" class="form-label">Room Name</label>
+                <input type="text" class="form-control" name="room_name" required />
+            </div>
+            <div class="mb-3">
+                <label for="floor_size" class="form-label">Floor Size(in sqr ft)</label>
+                <input type="number" class="form-control" name="floor_size" required />
+            </div>
+            <div class="mb-3">
+                <label for="bedQty" class="form-label">Bed Quantity</label>
+                <input type="number" class="form-control" name="bedQty" required />
+            </div>
+            <div class="mb-3">
+                <label for="amenities" class="form-label">Amenities(Comma Separated Values)</label>
+                <input type="text" class="form-control" name="amenities" required />
+            </div>
+            <div class="mb-3">
+                <label for="min_stay" class="form-label">Minimum Stay</label>
+                <input type="number" class="form-control" name="min_stay" required />
+            </div>
+            <div class="mb-3">
+                <label for="max_stay" class="form-label">Maximum Stay</label>
+                <input type="number" class="form-control" name="max_stay" required />
+            </div>
+            <div class="mb-3">
+                <label for="rent_per_day" class="form-label">Rent Per Day</label>
+                <input type="number" class="form-control" name="rent_per_day" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
     
+        </form>
+    </div>
+
+    <div class="displayRoom p-3 bg-warning-subtle">
+        <h2 class="text-center">Property Showcase</h2>
+        <button id="displayRoomBtn">Display Room</button>
+        <div id="roomContainer" class="row mt-3">
+            <!-- Property cards will be displayed here -->
+        </div>
+    </div>
 </body>
 
 </html>

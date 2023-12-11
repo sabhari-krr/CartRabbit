@@ -78,7 +78,7 @@ $(document).ready(function () {
         var res = JSON.parse(response);
         if (res.status == 200) {
           alert(res.message);
-          window.location.href = "index.html"; 
+          window.location.href = "index.html";
         } else {
           alert("Error: " + res.message);
         }
@@ -228,7 +228,122 @@ $(document).ready(function () {
       },
     });
   });
+  // Room Adding form ajax
+  $("#room_add_form").submit(function (event) {
+    event.preventDefault();
+    console.log("Room adding script logged");
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php",
+      data: $(this).serialize() + "&action=addRoomRequest",
+      success: function (response) {
+        var res = JSON.parse(response);
+        if (res.status == 200) {
+          $("#room_add_form")[0].reset();
+          alert(res.message);
+          // Refresh the displayed properties after updating
+          // $("#displayPropertiesBtn").trigger("click");
+        } else {
+          alert("Error: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  });
+
+  // Fetch the property names for adding rooms
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php",
+    data: { action: "getPropertyNames" },
+    success: function (response) {
+      var res = JSON.parse(response);
+      if (res.status == 200) {
+        // Populate the dropdown with property names
+        var propertyDropdown = $("#property_name");
+        propertyDropdown.empty();
+        $.each(res.data, function (index, property) {
+          propertyDropdown.append(
+            $("<option></option>").val(property).html(property)
+          );
+        });
+      } else {
+        alert("Error fetching property names: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error(error);
+    },
+  });
+  // Room display and edits section
+  $("#displayRoomBtn").click(function () {
+    // Send an AJAX request to fetch and display properties
+    $.ajax({
+      url: "php/actions.php",
+      type: "POST",
+      dataType: "json",
+      data: { action: "displayRoom" },
+      success: function (response) {
+        if (response.status === 200) {
+          // Properties fetched successfully
+          displayRoomCards(response.data);
+        } else {
+          displayNoRoomMessage();
+        }
+      },
+      error: function (error) {
+        console.error("Error fetching properties:", error);
+      },
+    });
+  });
+  function displayRoomCards(properties) {
+    console.log(properties); // Log the received response
+
+    var container = $("#roomContainer");
+    container.empty();
+
+    properties.forEach(function (room) {
+      var amenities = room.amenities.split(",");
+      var badgesHtml = amenities
+        .map(
+          (facility) =>
+            `<span class="badge bg-secondary">${facility.trim()}</span>`
+        )
+        .join(" ");
+      console.log(badgesHtml);
+      var cardHtml = `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${room.room_name}</h5>
+                            <p class="card-text">Property ID is${room.room_id}</p>
+                            <p class="card-text">${room.rent_per_day}</p>
+                            <p class="card-text">${room.min_stay}</p>
+                            <p class="card-text">${room.max_stay}</p>
+                            <p class="card-text">${room.floor_size}</p>
+                            <p class="card-text">${room.bedQty}</p>
+                            <p class="card-text">${badgesHtml}</p>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${room.room_id})">Edit</button>
+                            <button class="btn btn-outline-danger" onclick="confirmDelete(${room.house_id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+      container.append(cardHtml);
+    });
+  }
+  function displayNoRoomMessage() {
+    var container = $("#roomContainer");
+    container.empty();
+
+    var messageHtml = `<p class="lead text-center">No properties available</p>`;
+    container.append(messageHtml);
+  }
 });
+
 //outside document ready
 function confirmDelete(houseId) {
   if (confirm("Are you sure you want to delete this property?")) {
