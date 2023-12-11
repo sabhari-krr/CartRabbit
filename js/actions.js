@@ -210,10 +210,15 @@ $(document).ready(function () {
   $("#room_add_form").submit(function (event) {
     event.preventDefault();
     console.log("Room adding script logged");
+    var formData = new FormData(this);
+    formData.append("action", "addRoomRequest");
     $.ajax({
       type: "POST",
       url: "php/actions.php",
-      data: $(this).serialize() + "&action=addRoomRequest",
+      // data: $(this).serialize() + "&action=addRoomRequest",
+      data: formData,
+      processData: false, // Important: Don't process the files
+      contentType: false,
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
@@ -290,6 +295,13 @@ $(document).ready(function () {
             `<span class="badge bg-secondary">${facility.trim()}</span>`
         )
         .join(" ");
+      let images = room.images.split(",");
+      let imagesHtml = images
+        .map(
+          (image) =>
+            `<img src="assets/room_images/${image}" alt="Room Image" class="img-fluid shadow  h-100"  />`
+        )
+        .join(" ");
       console.log(badgesHtml);
       let cardHtml = `
                 <div class="col-md-4 mb-4">
@@ -303,6 +315,8 @@ $(document).ready(function () {
                             <p class="card-text">${room.floor_size}</p>
                             <p class="card-text">${room.bedQty}</p>
                             <p class="card-text">${badgesHtml}</p>
+                                                    <div class="room-images">${imagesHtml}</div>
+
                             <p class="card-text">Property Name: ${room.property_name}</p>
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmRoomDelete(${room.room_id})">Delete</button>
@@ -382,33 +396,33 @@ $(document).ready(function () {
     $("#displayRoomBtn").trigger("click");
   });
   $("#displayRoomBtn").click(function () {
-  // Get the selected property and house
-  let selectedProperty = $("#property_name").val();
-  let selectedHouse = $("#house_name").val();
+    // Get the selected property and house
+    let selectedProperty = $("#property_name").val();
+    let selectedHouse = $("#house_name").val();
 
-  // Send an AJAX request to fetch and display rooms for the selected property and house
-  $.ajax({
-    url: "php/actions.php",
-    type: "POST",
-    dataType: "json",
-    data: {
-      action: "displayRoom",
-      property_name: selectedProperty,
-      house_name: selectedHouse,
-    },
-    success: function (response) {
-      if (response.status === 200) {
-        // Rooms fetched successfully
-        displayRoomCards(response.data);
-      } else {
-        displayNoRoomMessage();
-      }
-    },
-    error: function (error) {
-      console.error("Error fetching rooms:", error);
-    },
+    // Send an AJAX request to fetch and display rooms for the selected property and house
+    $.ajax({
+      url: "php/actions.php",
+      type: "POST",
+      dataType: "json",
+      data: {
+        action: "displayRoom",
+        property_name: selectedProperty,
+        house_name: selectedHouse,
+      },
+      success: function (response) {
+        if (response.status === 200) {
+          // Rooms fetched successfully
+          displayRoomCards(response.data);
+        } else {
+          displayNoRoomMessage();
+        }
+      },
+      error: function (error) {
+        console.error("Error fetching rooms:", error);
+      },
+    });
   });
-});
 
   //end of document ready
 });
@@ -502,6 +516,8 @@ function editRoom(roomId) {
         $("#edit_room_form input[name='rent_per_day']").val(
           property.rent_per_day
         );
+                displayRoomImages(room.images);
+
         $("#editRoom").modal("show");
       } else {
         alert("Error fetching property details: " + res.message);
@@ -511,6 +527,7 @@ function editRoom(roomId) {
       console.error("Error fetching property details:", error);
     },
   });
+  
 }
 function confirmRoomDelete(roomID) {
   if (confirm("Are you sure you want to delete this room?")) {

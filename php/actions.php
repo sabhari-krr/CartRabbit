@@ -373,14 +373,35 @@ function addRoomRequest()
     $min_stay = mysqli_real_escape_string($db, $_POST['min_stay']);
     $max_stay = mysqli_real_escape_string($db, $_POST['max_stay']);
     $rent_per_day = mysqli_real_escape_string($db, $_POST['rent_per_day']);
+    // Images code
+    $images = []; // Array to store file names
 
-    $addRoomQuery = "INSERT INTO room (owner_id, house_id,property_name,
-    room_name, floor_size, bedQty, amenities, min_stay, max_stay, rent_per_day) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    if (!empty($_FILES['images']['name'][0])) {
+        $targetDir = "../assets/room_images/";
+
+        foreach ($_FILES['images']['name'] as $key => $value) {
+            $tempName = $_FILES['images']['tmp_name'][$key];
+            $fileName = time() . '_' . basename($value);
+            $targetFilePath = $targetDir . $fileName;
+
+            if (move_uploaded_file($tempName, $targetFilePath)) {
+                $images[] = $fileName;
+            } else {
+                $response = [
+                    'status' => 500,
+                    'message' => 'Failed to upload images.'
+                ];
+                echo json_encode($response);
+                exit();
+            }
+        }
+    }
+    $imagesString = implode(',', $images);
+    $addRoomQuery = "INSERT INTO room (owner_id, house_id, property_name, room_name, floor_size, bedQty, amenities, min_stay, max_stay, rent_per_day, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $addRoom = mysqli_prepare($db, $addRoomQuery);
     mysqli_stmt_bind_param(
         $addRoom,
-        'ssssssssss',
+        'sssssssssss',
         $owner_id,
         $house_id,
         $property_name,
@@ -390,7 +411,8 @@ function addRoomRequest()
         $amenities,
         $min_stay,
         $max_stay,
-        $rent_per_day
+        $rent_per_day,
+        $imagesString   // Convert array to comma-separated string
     );
     if (mysqli_stmt_execute($addRoom)) {
         // Registration successful
