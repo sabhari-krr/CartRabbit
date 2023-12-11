@@ -43,6 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'updateRoom':
             updateRoom();
             break;
+        case 'deleteRoom':
+            deleteRoom();
+            break;
         default:
             $res = [
                 'status' => 400,
@@ -547,18 +550,76 @@ function updateRoom()
     if (mysqli_query($db, $updateRoomQuery)) {
         // Update successful
         $response = [
-                'status' => 200,
-                'message' => 'Room updated successfully.',
-            ];
+            'status' => 200,
+            'message' => 'Room updated successfully.',
+        ];
         echo json_encode($response);
         error_log("SQL Query: " . $updateRoomQuery);
-
     } else {
         // Update failed
         $response = [
-                'status' => 500,
-                'message' => 'Property update failed. Please try again later.'
-            ];
+            'status' => 500,
+            'message' => 'Property update failed. Please try again later.'
+        ];
         echo json_encode($response);
     }
+}
+// Deleting Room
+function deleteRoom()
+{
+    global $db;
+    $owner_id = $_SESSION['owner_id'];
+    $room_id = $_POST['room_id'];
+
+    // Check if the property belongs to the logged-in owner
+    $checkOwnershipQuery = "SELECT * FROM room WHERE owner_id = ? AND room_id = ?";
+    $checkOwnership = mysqli_prepare($db, $checkOwnershipQuery);
+    mysqli_stmt_bind_param($checkOwnership, 'ss', $owner_id, $room_id);
+
+    if (mysqli_stmt_execute($checkOwnership)) {
+        $result = mysqli_stmt_get_result($checkOwnership);
+
+        if (mysqli_num_rows($result) > 0) {
+            // Property belongs to the owner, proceed with deletion
+            $deleteRoomQuery = "DELETE FROM room WHERE room_id = ?";
+            $deleteRoom = mysqli_prepare($db, $deleteRoomQuery);
+            mysqli_stmt_bind_param($deleteRoom, 's', $room_id);
+
+            if (mysqli_stmt_execute($deleteRoom)) {
+                // Deletion successful
+                $response = [
+                    'status' => 200,
+                    'message' => 'Room deleted successfully.'
+                ];
+                echo json_encode($response);
+            } else {
+                // Deletion failed
+                $response = [
+                    'status' => 500,
+                    'message' => 'Room deletion failed. Please try again later.'
+                ];
+                echo json_encode($response);
+            }
+
+            // Close the statement
+            mysqli_stmt_close($deleteRoom);
+        } else {
+            // Property doesn't belong to the owner
+            $response = [
+                'status' => 403,
+                'message' => 'You do not have permission to delete this property.'
+            ];
+            echo json_encode($response);
+        }
+    } else {
+        // Error checking ownership
+        $response = [
+            'status' => 500,
+            'message' => 'Error checking property ownership. Please try again later.'
+        ];
+        echo json_encode($response);
+    }
+
+    // Close the statement
+    mysqli_stmt_close($checkOwnership);
 }

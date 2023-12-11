@@ -326,7 +326,7 @@ $(document).ready(function () {
                             <p class="card-text">${room.bedQty}</p>
                             <p class="card-text">${badgesHtml}</p>
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
-                            <button class="btn btn-outline-danger" onclick="confirmDelete(${room.room_id})">Delete</button>
+                            <button class="btn btn-outline-danger" onclick="confirmRoomDelete(${room.room_id})">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -472,6 +472,33 @@ function editRoom(roomId) {
     },
     error: function (error) {
       console.error("Error fetching property details:", error);
+    },
+  });
+}
+function confirmRoomDelete(roomID) {
+  if (confirm("Are you sure you want to delete this room?")) {
+    // If the user confirms, delete the property
+    deleteRoom(roomID);
+  }
+}
+
+function deleteRoom(roomId) {
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php",
+    data: { action: "deleteRoom", room_id: roomId },
+    success: function (response) {
+      var res = JSON.parse(response);
+      if (res.status == 200) {
+        alert(res.message);
+        // Refresh the displayed properties after updating
+        $("#displayRoomBtn").trigger("click");
+      } else {
+        alert("Error: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error(error);
     },
   });
 }
