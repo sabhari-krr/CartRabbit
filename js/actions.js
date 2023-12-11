@@ -134,27 +134,6 @@ $(document).ready(function () {
       },
     });
   });
-
-  // function fetchProperties() {
-  //   $.ajax({
-  //     url: "php/actions.php",
-  //     type: "GET",
-  //     dataType: "json",
-  //     data: { action: "displayProperty" },
-  //     success: function (response) {
-  //       if (response.status === 200) {
-  //         // Properties fetched successfully
-  //         displayPropertyCards(response.data);
-  //       } else {
-  //         console.error(response.message);
-  //       }
-  //     },
-  //     error: function (error) {
-  //       console.error("Error fetching properties:", error);
-  //     },
-  //   });
-  // }
-
   function displayPropertyCards(properties) {
     let container = $("#propertyContainer");
     container.empty();
@@ -180,8 +159,7 @@ $(document).ready(function () {
                             <p class="card-text">${property.city}</p>
                             <p class="card-text">${property.postalZip}</p>
                             <p class="card-text">${badgesHtml}</p>
-              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${property.house_id})">Edit</button>
-
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${property.house_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmDelete(${property.house_id})">Delete</button>
                         </div>
                     </div>
@@ -374,6 +352,64 @@ $(document).ready(function () {
       },
     });
   });
+  // Getting the house names
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php",
+    data: { action: "getHouseNames" },
+    success: function (response) {
+      let res = JSON.parse(response);
+      if (res.status == 200) {
+        // Populate the dropdown with property names
+        let propertyDropdown = $("#house_name");
+        propertyDropdown.empty();
+        $.each(res.data, function (index, property) {
+          propertyDropdown.append(
+            $("<option></option>").val(property).html(property)
+          );
+        });
+      } else {
+        alert("Error fetching property names: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error(error);
+    },
+  });
+  // Event listener for house dropdown change
+  $("#house_name").on("change", function () {
+    // Trigger the displayRoomBtn click event when the house selection changes
+    $("#displayRoomBtn").trigger("click");
+  });
+  $("#displayRoomBtn").click(function () {
+  // Get the selected property and house
+  let selectedProperty = $("#property_name").val();
+  let selectedHouse = $("#house_name").val();
+
+  // Send an AJAX request to fetch and display rooms for the selected property and house
+  $.ajax({
+    url: "php/actions.php",
+    type: "POST",
+    dataType: "json",
+    data: {
+      action: "displayRoom",
+      property_name: selectedProperty,
+      house_name: selectedHouse,
+    },
+    success: function (response) {
+      if (response.status === 200) {
+        // Rooms fetched successfully
+        displayRoomCards(response.data);
+      } else {
+        displayNoRoomMessage();
+      }
+    },
+    error: function (error) {
+      console.error("Error fetching rooms:", error);
+    },
+  });
+});
+
   //end of document ready
 });
 

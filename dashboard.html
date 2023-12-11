@@ -213,7 +213,7 @@
             <div class="mb-3">
                 <label for="property_name" class="form-label">Select Property</label>
                 <select class="form-control" name="property_name" id="property_name" required>
-                    <!-- Options will be dynamically populated using JavaScript -->
+                    <!-- Options will be dynamically populated -->
                 </select>
             </div>
 
@@ -251,8 +251,13 @@
     </div>
     <div class="displayRoom p-3 bg-warning-subtle">
         <h2 class="text-center">Rooms Showcase</h2>
-
-        <button id="displayRoomBtn" class="btn btn-primary">Display Room</button>
+        <div class="mb-3">
+            <label for="house_name" class="form-label">Select Property</label>
+            <select class="form-control" name="house_name" id="house_name" required>
+                <!-- Options will be dynamically populated -->
+            </select>
+            <button id="displayRoomBtn" class="btn btn-primary">Display Room</button>
+        </div>
         <div id="roomContainer" class="row mt-3">
             <!-- Property cards will be displayed here -->
         </div>

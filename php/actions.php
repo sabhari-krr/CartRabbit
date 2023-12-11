@@ -34,8 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'getPropertyNames':
             getPropertyNames();
             break;
+        case 'getHouseNames':
+            getHouseNames();
+            break;
+
         case 'displayRoom':
-            displayRoom();
+            $property_name = $_POST['property_name'];
+            displayRoom($property_name);
             break;
         case 'getRoomDetails':
             getRoomDetails();
@@ -439,13 +444,56 @@ function getPropertyNames()
 }
 // Displaying rooms
 // displayRoom();
-function displayRoom()
+// function displayRoom()
+// {
+//     global $db;
+//     $owner_id = $_SESSION['owner_id'];
+//     $query = "SELECT * FROM room WHERE owner_id = ?";
+//     $stmt = mysqli_prepare($db, $query);
+//     mysqli_stmt_bind_param($stmt, 's', $owner_id);
+//     if (mysqli_stmt_execute($stmt)) {
+//         $result = mysqli_stmt_get_result($stmt);
+//         if (mysqli_num_rows($result) > 0) {
+//             $response = [
+//                 'status' => 200,
+//                 'message' => 'Room fetched successfully.',
+//                 'data' => mysqli_fetch_all(
+//                     $result,
+//                     MYSQLI_ASSOC
+//                 )
+//             ];
+//             echo json_encode($response);
+//             return;
+//         } else {
+//             $response = [
+//                 'status' => 404,
+//                 'message' => 'No property found.'
+//             ];
+//             echo json_encode($response);
+//             return;
+//         }
+//     } else {
+//         $response = [
+//             'status' => 500,
+//             'message' => 'Property fetch failed. Please try again later.'
+//         ];
+//         echo json_encode($response);
+//         return;
+//     }
+//     // Close the statement
+//     mysqli_stmt_close($stmt);
+// }
+// displayRoom(getHouseNames());
+function displayRoom($property_name)
 {
     global $db;
     $owner_id = $_SESSION['owner_id'];
-    $query = "SELECT * FROM room WHERE owner_id = ?";
+
+    // Add filters for property_name and house_name
+    $query = "SELECT * FROM room WHERE owner_id = ? AND property_name = ?";
     $stmt = mysqli_prepare($db, $query);
-    mysqli_stmt_bind_param($stmt, 's', $owner_id);
+    mysqli_stmt_bind_param($stmt, 'ss', $owner_id, $property_name);
+
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0) {
@@ -462,7 +510,7 @@ function displayRoom()
         } else {
             $response = [
                 'status' => 404,
-                'message' => 'No property found.'
+                'message' => 'No rooms found for the selected property and house.'
             ];
             echo json_encode($response);
             return;
@@ -470,11 +518,12 @@ function displayRoom()
     } else {
         $response = [
             'status' => 500,
-            'message' => 'Property fetch failed. Please try again later.'
+            'message' => 'Room fetch failed. Please try again later.'
         ];
         echo json_encode($response);
         return;
     }
+
     // Close the statement
     mysqli_stmt_close($stmt);
 }
@@ -623,4 +672,26 @@ function deleteRoom()
 
     // Close the statement
     mysqli_stmt_close($checkOwnership);
+}
+//Get house names
+function getHouseNames()
+{
+    global $db;
+
+    $propertyNamesQuery = "SELECT DISTINCT property_name FROM room WHERE owner_id = ?";
+    $propertyNamesStatement = mysqli_prepare($db, $propertyNamesQuery);
+    mysqli_stmt_bind_param($propertyNamesStatement, 's', $_SESSION['owner_id']);
+    mysqli_stmt_execute($propertyNamesStatement);
+    $resultPropertyNames = mysqli_stmt_get_result($propertyNamesStatement);
+    $propertyNames = [];
+    while ($row = mysqli_fetch_assoc($resultPropertyNames)) {
+        $propertyNames[] = $row['property_name'];
+    }
+    mysqli_stmt_close($propertyNamesStatement);
+
+    $res = [
+        'status' => 200,
+        'data' => $propertyNames,
+    ];
+    echo json_encode($res);
 }
