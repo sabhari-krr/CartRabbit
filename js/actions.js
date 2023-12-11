@@ -325,8 +325,8 @@ $(document).ready(function () {
                             <p class="card-text">${room.floor_size}</p>
                             <p class="card-text">${room.bedQty}</p>
                             <p class="card-text">${badgesHtml}</p>
-              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${room.room_id})">Edit</button>
-                            <button class="btn btn-outline-danger" onclick="confirmDelete(${room.house_id})">Delete</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
+                            <button class="btn btn-outline-danger" onclick="confirmDelete(${room.room_id})">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -339,9 +339,41 @@ $(document).ready(function () {
     var container = $("#roomContainer");
     container.empty();
 
-    var messageHtml = `<p class="lead text-center">No properties available</p>`;
+    var messageHtml = `<p class="lead text-center">No room available</p>`;
     container.append(messageHtml);
   }
+  // Save changes button inside the modal
+  $("#editRoom").on("hidden.bs.modal", function () {
+    // Clear the form when the modal is closed
+    $("#edit_room_form")[0].reset();
+  });
+
+  $("#edit_room_form").submit(function (event) {
+    event.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php",
+      data: $(this).serialize() + "&action=updateRoom",
+      success: function (response) {
+        console.log(response); // Log the response to the console
+
+        var res = JSON.parse(response);
+
+        if (res.status == 200) {
+          alert(res.message);
+          // Refresh the displayed properties after updating
+          $("#displayRoomBtn").trigger("click");
+        } else {
+          alert("Error: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+  });
+  //end of document ready
 });
 
 //outside document ready
@@ -402,6 +434,38 @@ function editProperty(houseId) {
           property.facilities
         );
         $("#staticBackdrop").modal("show");
+      } else {
+        alert("Error fetching property details: " + res.message);
+      }
+    },
+    error: function (error) {
+      console.error("Error fetching property details:", error);
+    },
+  });
+}
+// Edit Room
+function editRoom(roomId) {
+  // Fetch property details using AJAX
+  $.ajax({
+    type: "POST",
+    url: "php/actions.php",
+    data: { action: "getRoomDetails", room_id: roomId },
+    success: function (response) {
+      var res = JSON.parse(response);
+      if (res.status === 200) {
+        var property = res.data;
+        console.log("Property data from API:", property); // debug ku
+        $("#edit_room_form input[name='room_id']").val(property.room_id);
+        $("#edit_room_form input[name='room_name']").val(property.room_name);
+        $("#edit_room_form input[name='floor_size']").val(property.floor_size);
+        $("#edit_room_form input[name='bedQty']").val(property.bedQty);
+        $("#edit_room_form input[name='amenities']").val(property.amenities);
+        $("#edit_room_form input[name='min_stay']").val(property.min_stay);
+        $("#edit_room_form input[name='max_stay']").val(property.max_stay);
+        $("#edit_room_form input[name='rent_per_day']").val(
+          property.rent_per_day
+        );
+        $("#editRoom").modal("show");
       } else {
         alert("Error fetching property details: " + res.message);
       }

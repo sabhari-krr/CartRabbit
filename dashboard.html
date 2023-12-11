@@ -35,7 +35,7 @@
     <!-- Logout Button -->
     <button id="logoutButton" class="btn btn-danger fixed-top-right">Logout</button>
 
-    <!-- Modal -->
+    <!--Edit Property Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -84,6 +84,59 @@
                             <input type="text" class="form-control" name="facilities"
                                 placeholder="Free Wifi, CCTV Surviellance" />
                         </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Edit House Modal -->
+    <div class="modal fade" id="editRoom" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Room</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit_room_form">
+                        <input type="hidden" class="form-control" name="room_id" />
+                        <div class="mb-3">
+                            <label for="room_name" class="form-label">Room Name</label>
+                            <input type="text" class="form-control" name="room_name" placeholder="Stanza Living" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="floor_size" class="form-label">Floor Size</label>
+                            <input type="number" class="form-control" name="floor_size" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="bedQty" class="form-label">Bed Quantity</label>
+                            <input type="number" class="form-control" name="bedQty" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="amenities" class="form-label">Amenities<span class="text-danger">(Comma Separated Values)</span></label>
+                            <input type="text" class="form-control" name="amenities" />
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="min_stay" class="form-label">Minimum Stay</label>
+                            <input type="number" class="form-control" name="min_stay" />
+
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="max_stay" class="form-label">Maximum Stay</label>
+                            <input type="number" class="form-control" name="max_stay" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="rent_per_day" class="form-label">Rent Per Day</label>
+                            <input type="number" class="form-control" name="rent_per_day" />
+                        </div>
+                        
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -192,7 +245,7 @@
                 <input type="number" class="form-control" name="rent_per_day" required />
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
-    
+
         </form>
     </div>
 

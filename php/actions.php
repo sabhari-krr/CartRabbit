@@ -37,6 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'displayRoom':
             displayRoom();
             break;
+        case 'getRoomDetails':
+            getRoomDetails();
+            break;
+        case 'updateRoom':
+            updateRoom();
+            break;
         default:
             $res = [
                 'status' => 400,
@@ -350,7 +356,7 @@ function addRoomRequest()
     mysqli_stmt_execute($getHouseId);
     mysqli_stmt_bind_result($getHouseId, $house_id);
     mysqli_stmt_fetch($getHouseId);
-    mysqli_stmt_close($getHouseId); 
+    mysqli_stmt_close($getHouseId);
 
     $room_name = mysqli_real_escape_string($db, $_POST['room_name']);
     $floor_size = mysqli_real_escape_string($db, $_POST['floor_size']);
@@ -380,7 +386,8 @@ function addRoomRequest()
     if (mysqli_stmt_execute($addRoom)) {
         // Registration successful
         $updatePropertyQuery = "UPDATE property SET roomQty = roomQty + 1 WHERE house_id = ?";
-        $updateProperty = mysqli_prepare($db,
+        $updateProperty = mysqli_prepare(
+            $db,
             $updatePropertyQuery
         );
         mysqli_stmt_bind_param($updateProperty, 's', $house_id);
@@ -439,20 +446,20 @@ function displayRoom()
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0) {
             $response = [
-                    'status' => 200,
-                    'message' => 'Room fetched successfully.',
-                    'data' => mysqli_fetch_all(
-                        $result,
-                        MYSQLI_ASSOC
-                    )
-                ];
+                'status' => 200,
+                'message' => 'Room fetched successfully.',
+                'data' => mysqli_fetch_all(
+                    $result,
+                    MYSQLI_ASSOC
+                )
+            ];
             echo json_encode($response);
             return;
         } else {
             $response = [
-                    'status' => 404,
-                    'message' => 'No property found.'
-                ];
+                'status' => 404,
+                'message' => 'No property found.'
+            ];
             echo json_encode($response);
             return;
         }
@@ -466,4 +473,92 @@ function displayRoom()
     }
     // Close the statement
     mysqli_stmt_close($stmt);
+}
+// Getting room filler details for editing
+function getRoomDetails()
+{
+    global $db;
+    $room_id = $_POST['room_id'];
+
+    // Select query to retrieve property details
+    $getRoomQuery = "SELECT * FROM room WHERE room_id = ?";
+    $getRoom = mysqli_prepare($db, $getRoomQuery);
+    mysqli_stmt_bind_param(
+        $getRoom,
+        's',
+        $room_id
+    );
+
+    if (mysqli_stmt_execute($getRoom)) {
+        $result = mysqli_stmt_get_result($getRoom);
+
+        if ($property = mysqli_fetch_assoc($result)) {
+            // Property details retrieved successfully
+            $response = [
+                'status' => 200,
+                'message' => 'Room details fetched successfully.',
+                'data' => $property
+            ];
+            echo json_encode($response);
+        } else {
+            // Property not found
+            $response = [
+                'status' => 404,
+                'message' => 'Room not found.'
+            ];
+            echo json_encode($response);
+        }
+    } else {
+        // Error fetching property details
+        $response = [
+            'status' => 500,
+            'message' => 'Error fetching property details. Please try again later.'
+        ];
+        echo json_encode($response);
+    }
+
+    // Close the statement
+    mysqli_stmt_close($getRoom);
+}
+// Update Room
+function updateRoom()
+{
+    global $db;
+    $room_id = mysqli_real_escape_string($db, $_POST['room_id']);
+    $room_name = mysqli_real_escape_string($db, $_POST['room_name']);
+    $floor_size = mysqli_real_escape_string($db, $_POST['floor_size']);
+    $bedQty = mysqli_real_escape_string($db, $_POST['bedQty']);
+    $amenities = mysqli_real_escape_string($db, $_POST['amenities']);
+    $min_stay = mysqli_real_escape_string($db, $_POST['min_stay']);
+    $max_stay = mysqli_real_escape_string($db, $_POST['max_stay']);
+    $rent_per_day = mysqli_real_escape_string($db, $_POST['rent_per_day']);
+
+    // Update query
+    $updateRoomQuery = "UPDATE room SET 
+        room_name = '$room_name',
+        floor_size = '$floor_size',
+        bedQty = '$bedQty',
+        amenities = '$amenities',
+        min_stay = '$min_stay',
+        max_stay = '$max_stay',
+        rent_per_day = '$rent_per_day'
+        WHERE room_id = '$room_id'";
+
+    if (mysqli_query($db, $updateRoomQuery)) {
+        // Update successful
+        $response = [
+                'status' => 200,
+                'message' => 'Room updated successfully.',
+            ];
+        echo json_encode($response);
+        error_log("SQL Query: " . $updateRoomQuery);
+
+    } else {
+        // Update failed
+        $response = [
+                'status' => 500,
+                'message' => 'Property update failed. Please try again later.'
+            ];
+        echo json_encode($response);
+    }
 }
