@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
             break;
 
         case 'displayRoom':
-            $property_name = $_POST['property_name'];
+            $property_name = $_POST['house_name'];
             displayRoom($property_name);
             break;
         case 'getRoomDetails':
