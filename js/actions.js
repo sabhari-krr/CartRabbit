@@ -6,7 +6,7 @@ $(document).ready(function () {
       url: "php/actions.php",
       data: $(this).serialize() + "&action=registerOwner",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         $("#owner_reg_form")[0].reset();
         if (res.status == 200) {
           alert(res.message);
@@ -29,7 +29,7 @@ $(document).ready(function () {
       url: "php/authentication.php",
       data: $(this).serialize() + "&action=loginOwner",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         $("#owner_login_form")[0].reset();
         if (res.status == 200) {
           alert(res.message);
@@ -55,7 +55,7 @@ $(document).ready(function () {
       url: "php/authentication.php",
       data: $(this).serialize() + "&action=resetPasswordRequest",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         $("#pwd_reset_request_form")[0].reset();
         if (res.status == 200) {
           alert(res.message);
@@ -75,7 +75,7 @@ $(document).ready(function () {
       url: "php/authentication.php",
       data: { action: "logout" },
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         if (res.status == 200) {
           alert(res.message);
           window.location.href = "index.html";
@@ -97,7 +97,7 @@ $(document).ready(function () {
       url: "php/actions.php",
       data: $(this).serialize() + "&action=addPropertyRequest",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         if (res.status == 200) {
           $("#add_property_form")[0].reset();
           alert(res.message);
@@ -156,19 +156,19 @@ $(document).ready(function () {
   // }
 
   function displayPropertyCards(properties) {
-    var container = $("#propertyContainer");
+    let container = $("#propertyContainer");
     container.empty();
 
     properties.forEach(function (property) {
-      var facilities = property.facilities.split(",");
-      var badgesHtml = facilities
+      let facilities = property.facilities.split(",");
+      let badgesHtml = facilities
         .map(
           (facility) =>
             `<span class="badge bg-secondary">${facility.trim()}</span>`
         )
         .join(" ");
       // console.log(badgesHtml);
-      var cardHtml = `
+      let cardHtml = `
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
@@ -193,10 +193,10 @@ $(document).ready(function () {
   }
   // Function to display a message when no properties are found
   function displayNoPropertiesMessage() {
-    var container = $("#propertyContainer");
+    let container = $("#propertyContainer");
     container.empty();
 
-    var messageHtml = `<p class="lead text-center">No properties available</p>`;
+    let messageHtml = `<p class="lead text-center">No properties available</p>`;
     container.append(messageHtml);
   }
   // Save changes button inside the modal
@@ -213,7 +213,7 @@ $(document).ready(function () {
       url: "php/actions.php",
       data: $(this).serialize() + "&action=updateProperty",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
 
         if (res.status == 200) {
           alert(res.message);
@@ -237,7 +237,7 @@ $(document).ready(function () {
       url: "php/actions.php",
       data: $(this).serialize() + "&action=addRoomRequest",
       success: function (response) {
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
         if (res.status == 200) {
           $("#room_add_form")[0].reset();
           alert(res.message);
@@ -259,10 +259,10 @@ $(document).ready(function () {
     url: "php/actions.php",
     data: { action: "getPropertyNames" },
     success: function (response) {
-      var res = JSON.parse(response);
+      let res = JSON.parse(response);
       if (res.status == 200) {
         // Populate the dropdown with property names
-        var propertyDropdown = $("#property_name");
+        let propertyDropdown = $("#property_name");
         propertyDropdown.empty();
         $.each(res.data, function (index, property) {
           propertyDropdown.append(
@@ -301,19 +301,19 @@ $(document).ready(function () {
   function displayRoomCards(properties) {
     console.log(properties); // Log the received response
 
-    var container = $("#roomContainer");
+    let container = $("#roomContainer");
     container.empty();
 
     properties.forEach(function (room) {
-      var amenities = room.amenities.split(",");
-      var badgesHtml = amenities
+      let amenities = room.amenities.split(",");
+      let badgesHtml = amenities
         .map(
           (facility) =>
             `<span class="badge bg-secondary">${facility.trim()}</span>`
         )
         .join(" ");
       console.log(badgesHtml);
-      var cardHtml = `
+      let cardHtml = `
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
@@ -336,10 +336,10 @@ $(document).ready(function () {
     });
   }
   function displayNoRoomMessage() {
-    var container = $("#roomContainer");
+    let container = $("#roomContainer");
     container.empty();
 
-    var messageHtml = `<p class="lead text-center">No room available</p>`;
+    let messageHtml = `<p class="lead text-center">No room available</p>`;
     container.append(messageHtml);
   }
   // Save changes button inside the modal
@@ -358,7 +358,7 @@ $(document).ready(function () {
       success: function (response) {
         console.log(response); // Log the response to the console
 
-        var res = JSON.parse(response);
+        let res = JSON.parse(response);
 
         if (res.status == 200) {
           alert(res.message);
@@ -390,7 +390,7 @@ function deleteProperty(houseId) {
     url: "php/actions.php",
     data: { action: "deleteProperty", house_id: houseId },
     success: function (response) {
-      var res = JSON.parse(response);
+      let res = JSON.parse(response);
       if (res.status == 200) {
         alert(res.message);
         // Refresh the displayed properties after updating
@@ -412,9 +412,9 @@ function editProperty(houseId) {
     url: "php/actions.php",
     data: { action: "getPropertyDetails", house_id: houseId },
     success: function (response) {
-      var res = JSON.parse(response);
+      let res = JSON.parse(response);
       if (res.status === 200) {
-        var property = res.data;
+        let property = res.data;
         console.log("Property data from API:", property); // debug ku
         $("#edit_property_form input[name='house_id']").val(property.house_id);
         $("#edit_property_form input[name='property_name']").val(
@@ -451,9 +451,9 @@ function editRoom(roomId) {
     url: "php/actions.php",
     data: { action: "getRoomDetails", room_id: roomId },
     success: function (response) {
-      var res = JSON.parse(response);
+      let res = JSON.parse(response);
       if (res.status === 200) {
-        var property = res.data;
+        let property = res.data;
         console.log("Property data from API:", property); // debug ku
         $("#edit_room_form input[name='room_id']").val(property.room_id);
         $("#edit_room_form input[name='room_name']").val(property.room_name);
@@ -488,7 +488,7 @@ function deleteRoom(roomId) {
     url: "php/actions.php",
     data: { action: "deleteRoom", room_id: roomId },
     success: function (response) {
-      var res = JSON.parse(response);
+      let res = JSON.parse(response);
       if (res.status == 200) {
         alert(res.message);
         // Refresh the displayed properties after updating
