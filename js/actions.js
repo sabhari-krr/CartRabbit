@@ -325,6 +325,7 @@ $(document).ready(function () {
                             <p class="card-text">${room.floor_size}</p>
                             <p class="card-text">${room.bedQty}</p>
                             <p class="card-text">${badgesHtml}</p>
+                            <p class="card-text">Property Name: ${room.property_name}</p>
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmRoomDelete(${room.room_id})">Delete</button>
                         </div>

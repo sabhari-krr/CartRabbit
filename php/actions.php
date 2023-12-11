@@ -369,15 +369,16 @@ function addRoomRequest()
     $max_stay = mysqli_real_escape_string($db, $_POST['max_stay']);
     $rent_per_day = mysqli_real_escape_string($db, $_POST['rent_per_day']);
 
-    $addRoomQuery = "INSERT INTO room (owner_id, house_id,
+    $addRoomQuery = "INSERT INTO room (owner_id, house_id,property_name,
     room_name, floor_size, bedQty, amenities, min_stay, max_stay, rent_per_day) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $addRoom = mysqli_prepare($db, $addRoomQuery);
     mysqli_stmt_bind_param(
         $addRoom,
-        'sssssssss',
+        'ssssssssss',
         $owner_id,
         $house_id,
+        $property_name,
         $room_name,
         $floor_size,
         $bedQty,
