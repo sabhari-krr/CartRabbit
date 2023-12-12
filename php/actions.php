@@ -51,6 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
         case 'deleteRoom':
             deleteRoom();
             break;
+            case 'addPics':
+                addPics();
+                break;
         default:
             $res = [
                 'status' => 400,
@@ -716,4 +719,56 @@ function getHouseNames()
         'data' => $propertyNames,
     ];
     echo json_encode($res);
+}
+function addPics()
+{
+    global $db;
+    $owner_id = $_SESSION['owner_id'];
+
+    $images = []; // Array to store file names
+
+    if (!empty($_FILES['formFile']['name'][0])) {
+        $targetDir = "../assets/room_images/";
+
+        foreach ($_FILES['formFile']['name'] as $key => $value) {
+            $tempName = $_FILES['formFile']['tmp_name'][$key];
+            $fileName = time() . '_' . basename($value);
+            $targetFilePath = $targetDir . $fileName;
+
+            if (move_uploaded_file($tempName, $targetFilePath)) {
+                $images[] = $fileName;
+            } else {
+                $response = [
+                    'status' => 500,
+                    'message' => 'Failed to upload images.'
+                ];
+                echo json_encode($response);
+                exit();
+            }
+        }
+    }
+
+    $imagesString = implode(',', $images);
+
+    // Append the new images to the existing images in the database
+    $updateImagesQuery = "UPDATE room SET images = CONCAT(images, ?, ',') WHERE owner_id = ?";
+    $updateImages = mysqli_prepare($db, $updateImagesQuery);
+    mysqli_stmt_bind_param($updateImages, 'ss', $imagesString, $owner_id);
+
+    if (mysqli_stmt_execute($updateImages)) {
+        $response = [
+            'status' => 200,
+            'message' => 'Images added successfully.'
+        ];
+        echo json_encode($response);
+    } else {
+        $response = [
+            'status' => 500,
+            'message' => 'Failed to add images to the database.'
+        ];
+        echo json_encode($response);
+    }
+
+    // Close the statement
+    mysqli_stmt_close($updateImages);
 }
