@@ -14,6 +14,7 @@
     <!-- Jquery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Custom js -->
+    <script src="js/customer_actions.js"></script>
     <script src="js/actions.js"></script>
 </head>
 
@@ -88,7 +89,45 @@
             </button>
         </form>
     </div>
-    
+    <div class="customer_registration w-50 bg-success-subtle p-5">
+        <form id="cust_reg_form">
+            <h2 class="text-center">Customer Registration</h2>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" required />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="number" class="form-control" name="mobile" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+    <div class="customer_login w-50 bg-dark-subtle p-5">
+        <form id="cust_login_form">
+            <h2 class="text-center">Customer Login</h2>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pwdresetmodal">
+                Forgot password?
+            </button>
+        </form>
+    </div>
 </body>
 
 </html>

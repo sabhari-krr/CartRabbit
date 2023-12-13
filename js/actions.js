@@ -3,7 +3,7 @@ $(document).ready(function () {
     event.preventDefault();
     $.ajax({
       type: "POST",
-      url: "php/actions.php",
+      url: "php/authentication.php",
       data: $(this).serialize() + "&action=registerOwner",
       success: function (response) {
         let res = JSON.parse(response);
