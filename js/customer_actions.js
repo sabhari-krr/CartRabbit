@@ -1,8 +1,4 @@
-
 $(document).ready(function () {
- 
-
- 
   $("#cust_reg_form").submit(function (event) {
     event.preventDefault();
     $.ajax({
@@ -72,7 +68,7 @@ $(document).ready(function () {
     });
   });
   // Function to check login status
-  
+
   //end of document ready
 });
 
