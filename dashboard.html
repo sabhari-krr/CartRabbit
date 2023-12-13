@@ -209,7 +209,7 @@
 
 
     <div class="room_add_form bg-body-secondary p-3">
-        <form id="room_add_form" enctype="multipart/form-data">
+        <form id="room_add_form">
             <h2 class="text-center">Room Adding</h2>
             <div class="mb-3">
                 <label for="property_name" class="form-label">Select Property</label>
@@ -245,10 +245,6 @@
             <div class="mb-3">
                 <label for="rent_per_day" class="form-label">Rent Per Day</label>
                 <input type="number" class="form-control" name="rent_per_day" required />
-            </div>
-            <div class="mb-3">
-                <label for="images" class="form-label">Images</label>
-                <input type="file" class="form-control" name="images[]" id="images" multiple accept="image/*" />
             </div>
 
             <button type="submit" class="btn btn-success">Submit</button>

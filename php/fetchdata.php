@@ -107,15 +107,15 @@ function fetchImages($owner_id, $room_id)
     $query = "SELECT images FROM images WHERE owner_id='$owner_id' AND room_id='$room_id'";
     $result = mysqli_query($db, $query);
 
-    $imageHtml = '<div class="container d-flex flex-wrap align-items-start">'; // Container with flex display and align-items-start
+    $imageHtml = '<div class="container d-flex flex-wrap">'; // Container with flex display
 
     while ($row = mysqli_fetch_assoc($result)) {
         $imageFilenames = explode(',', $row['images']);
 
         foreach ($imageFilenames as $filename) {
             $imageUrl = "../assets/room_images/" . $filename;
-            $imageHtml .= '<div class="card m-2" style="width: 18rem;">'; // Bootstrap card
-            $imageHtml .= '<img src="' . $imageUrl . '" class="card-img-top img-thumbnail h-50" style="object-fit: cover;" alt="Image">';
+            $imageHtml .= '<div class="card m-2 h-50" style="width: 18rem;">'; // Bootstrap card
+            $imageHtml .= '<img src="' . $imageUrl . '" class="card-img-top img-thumbnail h-50" style="object-fit:cover" alt="Image">';
             $imageHtml .= '<div class="card-body">';
             $imageHtml .= '<button class="delete-image btn btn-danger rounded-pill" data-filename="' . $filename . '">Delete</button>';
             $imageHtml .= '</div>';
@@ -128,7 +128,6 @@ function fetchImages($owner_id, $room_id)
     echo $imageHtml;
     exit();
 }
-
 
 function deleteImage($owner_id, $room_id, $filename)
 {

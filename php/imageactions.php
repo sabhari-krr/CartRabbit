@@ -12,9 +12,9 @@
 </head>
 
 <body>
-    <form id="addPics" enctype="multipart/form-data">
-        <label for="propertySelect">Select Room:</label>
-        <select id="propertySelect" name="room_id">
+    <form id="addPics" enctype="multipart/form-data" class="p-4 bg-danger-subtle">
+        <label for="propertySelect " class="form-label">Select Room:</label>
+        <select id="propertySelect" name="room_id" class="form-control">
             <!-- Options will be dynamically loaded using AJAX -->
         </select>
         <div class="mb-3">

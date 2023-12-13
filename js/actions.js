@@ -224,6 +224,8 @@ $(document).ready(function () {
         if (res.status == 200) {
           $("#room_add_form")[0].reset();
           alert(res.message);
+          $("#displayRoomBtn").trigger("click");
+
           // Refresh the displayed properties after updating
           // $("#displayPropertiesBtn").trigger("click");
         } else {
@@ -295,13 +297,13 @@ $(document).ready(function () {
             `<span class="badge bg-secondary">${facility.trim()}</span>`
         )
         .join(" ");
-      let images = room.images.split(",");
-      let imagesHtml = images
-        .map(
-          (image) =>
-            `<img src="assets/room_images/${image}" alt="Room Image" class="img-fluid shadow  h-100"  />`
-        )
-        .join(" ");
+      // let images = room.images.split(",");
+      // let imagesHtml = images
+      //   .map(
+      //     (image) =>
+      //       `<img src="assets/room_images/${image}" alt="Room Image" class="img-fluid shadow  h-100"  />`
+      //   )
+      //   .join(" ");
       console.log(badgesHtml);
       let cardHtml = `
                 <div class="col-md-4 mb-4">
@@ -315,8 +317,6 @@ $(document).ready(function () {
                             <p class="card-text">${room.floor_size}</p>
                             <p class="card-text">${room.bedQty}</p>
                             <p class="card-text">${badgesHtml}</p>
-                                                    <div class="room-images">${imagesHtml}</div>
-
                             <p class="card-text">Property Name: ${room.property_name}</p>
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmRoomDelete(${room.room_id})">Delete</button>
@@ -407,8 +407,8 @@ $(document).ready(function () {
       dataType: "json",
       data: {
         action: "displayRoom",
-        property_name: selectedProperty,
-        house_name: selectedHouse,
+        // property_name: selectedProperty,
+        // house_name: selectedHouse,
       },
       success: function (response) {
         if (response.status === 200) {
