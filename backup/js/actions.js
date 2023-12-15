@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  // Owner Registration Ajax
   $("#owner_reg_form").submit(function (event) {
     event.preventDefault();
     $.ajax({
@@ -69,7 +68,7 @@ $(document).ready(function () {
       },
     });
   });
-  // Owner Logout Ajax
+  // Lotout Ajax
   $("#logoutButton").click(function () {
     $.ajax({
       type: "POST",

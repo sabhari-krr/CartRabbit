@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CartRabbit</title>
+    <!-- Bootstrap CDN's -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- Jquery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Custom js -->
+    <script src="js/customer_actions.js"></script>
+    <script src="js/actions.js"></script>
+</head>
+
+<body>
+    <div class="owner_regsitration w-50 bg-danger p-5">
+        <!-- Modal -->
+        <div class="modal fade" id="pwdresetmodal" data-bs-backdrop="static" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reset your password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="pwd_reset_request_form">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address
+                                </label>
+                                <input type="email" class="form-control mb-3" name="email"
+                                    placeholder="Enter your email">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Remember!</strong> Link is vaid for just 30 minutes
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit " class="btn btn-dark">Send reset password link</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form id="owner_reg_form">
+            <h2 class="text-center">Owner Registration</h2>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" required />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="number" class="form-control" name="mobile" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+    <div class="owner_login w-50 bg-warning p-5">
+        <form id="owner_login_form">
+            <h2 class="text-center">Owner Login</h2>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pwdresetmodal">
+                Forgot password?
+            </button>
+        </form>
+    </div>
+    <div class="customer_registration w-50 bg-success-subtle p-5">
+        <form id="cust_reg_form">
+            <h2 class="text-center">Customer Registration</h2>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" required />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="number" class="form-control" name="mobile" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+    <div class="customer_login w-50 bg-dark-subtle p-5">
+        <form id="cust_login_form">
+            <h2 class="text-center">Customer Login</h2>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pwdresetmodal">
+                Forgot password?
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>
