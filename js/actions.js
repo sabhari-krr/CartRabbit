@@ -75,8 +75,6 @@ $(document).ready(function () {
             text: "User not found!",
             icon: "error",
           });
-
-          // alert("Error: " + res.message);
         }
       },
       error: function (error) {
@@ -115,10 +113,21 @@ $(document).ready(function () {
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
-          alert(res.message);
-          window.location.href = "index.html";
+          Swal.fire({
+            title: "Success!",
+            text: "Logged out!",
+            icon: "success",
+            didClose: () => {
+              window.location.href = "index.html";
+            },
+          });
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "warning",
+          });
+          // alert("Error: " + res.message);
         }
       },
       error: function (error) {
@@ -169,10 +178,12 @@ $(document).ready(function () {
   // ------------------------------
   // NAVIGATION BEHAVIOUR END
   // ------------------------------
+  // ------------------------------
+  // PROPERTY SECTION START
+  // ------------------------------
   // Propertry Registration Form
   $("#add_property_form").submit(function (event) {
     event.preventDefault();
-    console.log("Came inside jquery");
     $.ajax({
       type: "POST",
       url: "php/actions.php",
@@ -181,12 +192,19 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         if (res.status == 200) {
           $("#add_property_form")[0].reset();
-          alert(res.message);
-          // Refresh the displayed properties after updating
+          Swal.fire({
+            title: "Hurray!",
+            text: "Property added!",
+            icon: "success",
+          });
           $("#displayPropertiesBtn").trigger("click");
           refreshList();
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -196,7 +214,6 @@ $(document).ready(function () {
   });
   // Propertry Showcase part
   $("#displayPropertiesBtn").click(function () {
-    // Send an AJAX request to fetch and display properties
     $.ajax({
       url: "php/actions.php",
       type: "POST",
@@ -224,22 +241,22 @@ $(document).ready(function () {
       let badgesHtml = facilities
         .map(
           (facility) =>
-            `<span class="badge bg-secondary">${facility.trim()}</span>`
+            `<span class="badge bg-secondary py-2 px-3 m-1 rounded-pill">${facility.trim()}</span>`
         )
         .join(" ");
-      // console.log(badgesHtml);
       let cardHtml = `
                 <div class="col-md-4 mb-4">
-                    <div class="card">
+                    <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title">${property.property_name}</h5>
-                            <p class="card-text">Property ID is${property.house_id}</p>
+                            <h5 class="card-title fw-bolder" style="color: #3c8c74;">${property.property_name}</h5>
+                            <p class="card-text fw-bolder"><i class="fa-solid fa-location-dot pe-2" style="color: #3c8c74;"></i>Address</p>
                             <p class="card-text">${property.address_line}</p>
-                            <p class="card-text">${property.country}</p>
-                            <p class="card-text">${property.state}</p>
-                            <p class="card-text">${property.city}</p>
+                            <p class="card-text">${property.city},&nbsp;&nbsp;${property.state},&nbsp;&nbsp;${property.country}</p>
                             <p class="card-text">${property.postalZip}</p>
+                            <p class="card-text fw-bolder"><i class="fa-solid fa-house-circle-exclamation pe-2" style="color: #3c8c74;"></i>Facilities</p>
                             <p class="card-text">${badgesHtml}</p>
+                            <p class="card-text fw-bolder"><i class="fa-solid fa-compass pe-2" style="color: #3c8c74;"></i>Location</p>
+                            <p class="card-text"><a href="${property.location}" target="_blank" class="link-secondary">${property.location}</a></p>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editProperty(${property.house_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmDelete(${property.house_id})">Delete</button>
                         </div>
@@ -263,7 +280,7 @@ $(document).ready(function () {
     // Clear the form when the modal is closed
     $("#edit_property_form")[0].reset();
   });
-
+  // Updating the property
   $("#edit_property_form").submit(function (event) {
     event.preventDefault();
 
@@ -275,11 +292,18 @@ $(document).ready(function () {
         let res = JSON.parse(response);
 
         if (res.status == 200) {
-          alert(res.message);
+          Swal.fire({
+            title: "Changes updated!",
+            icon: "success",
+          });
           // Refresh the displayed properties after updating
           $("#displayPropertiesBtn").trigger("click");
+          $("#staticBackdrop").modal("hide");
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            text: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -289,7 +313,8 @@ $(document).ready(function () {
   });
   // Function to refresh thelist after adding the property
   function refreshList() {
-    console.log("Called for refreshing list");
+    // console.log("Called for refreshing list");
+    //This ajax fetches the property list
     $.ajax({
       type: "POST",
       url: "php/actions.php",
@@ -297,7 +322,6 @@ $(document).ready(function () {
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
-          // Populate the dropdown with property names
           let propertyDropdown = $("#property_name");
           propertyDropdown.empty();
           $.each(res.data, function (index, property) {
@@ -313,6 +337,7 @@ $(document).ready(function () {
         console.error(error);
       },
     });
+    //This ajax fetches the house names list
     $.ajax({
       type: "POST",
       url: "php/actions.php",
@@ -320,7 +345,6 @@ $(document).ready(function () {
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
-          // Populate the dropdown with property names
           let propertyDropdown = $("#house_name");
           propertyDropdown.empty();
           $.each(res.data, function (index, property) {
@@ -336,14 +360,14 @@ $(document).ready(function () {
         console.error(error);
       },
     });
+    //This ajax fetches the house names list for photos section
     $.ajax({
       type: "POST",
       url: "php/fetchdata.php",
       data: {
-        action: "fetchRooms", // Specify the action
+        action: "fetchRooms",
       },
       success: function (data) {
-        // Populate the dropdown with fetched room names
         $("#propertySelect").html(data);
       },
       error: function (err) {
@@ -351,6 +375,12 @@ $(document).ready(function () {
       },
     });
   }
+  // ------------------------------
+  // PROPERTY SECTION END
+  // ------------------------------
+  // ------------------------------
+  // ROOM SECTION START
+  // ------------------------------
   // Room Adding form ajax
   $("#room_add_form").submit(function (event) {
     event.preventDefault();
@@ -360,18 +390,23 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: "php/actions.php",
-      // data: $(this).serialize() + "&action=addRoomRequest",
       data: formData,
-      processData: false, // Important: Don't process the files
+      processData: false,
       contentType: false,
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
           $("#room_add_form")[0].reset();
-          alert(res.message);
+          Swal.fire({
+            title: "Room added!",
+            icon: "success",
+          });
           $("#displayRoomBtn").trigger("click");
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -388,7 +423,6 @@ $(document).ready(function () {
     success: function (response) {
       let res = JSON.parse(response);
       if (res.status == 200) {
-        // Populate the dropdown with property names
         let propertyDropdown = $("#property_name");
         propertyDropdown.empty();
         $.each(res.data, function (index, property) {
@@ -404,9 +438,9 @@ $(document).ready(function () {
       console.error(error);
     },
   });
-  // Room display and edits section
+
+  // Room display and edits section ajax
   $("#displayRoomBtn").click(function () {
-    // Send an AJAX request to fetch and display properties
     $.ajax({
       url: "php/actions.php",
       type: "POST",
@@ -426,8 +460,6 @@ $(document).ready(function () {
     });
   });
   function displayRoomCards(properties) {
-    console.log(properties); // Log the received response
-
     let container = $("#roomContainer");
     container.empty();
 
@@ -436,30 +468,22 @@ $(document).ready(function () {
       let badgesHtml = amenities
         .map(
           (facility) =>
-            `<span class="badge bg-secondary">${facility.trim()}</span>`
+            `<span class="badge bg-secondary py-2 px-3 m-1 rounded-pill">${facility.trim()}</span>`
         )
         .join(" ");
-      // let images = room.images.split(",");
-      // let imagesHtml = images
-      //   .map(
-      //     (image) =>
-      //       `<img src="assets/room_images/${image}" alt="Room Image" class="img-fluid shadow  h-100"  />`
-      //   )
-      //   .join(" ");
-      console.log(badgesHtml);
       let cardHtml = `
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">${room.room_name}</h5>
-                            <p class="card-text">Property ID is${room.room_id}</p>
-                            <p class="card-text">${room.rent_per_day}</p>
-                            <p class="card-text">${room.min_stay}</p>
-                            <p class="card-text">${room.max_stay}</p>
-                            <p class="card-text">${room.floor_size}</p>
-                            <p class="card-text">${room.bedQty}</p>
+                        <h5 class="card-title fw-bolder" style="color: #3c8c74;">${room.room_name}</h5>
+                        <p class="card-text"><i class="fa-solid fa-hotel pe-2" style="color: #448c74;"></i>${room.property_name}</p>
+                            <p class="card-text"><i class="fa-solid fa-rupee-sign pe-2" style="color: #448c74;"></i>${room.rent_per_day}&nbsp;/day</p>
+                            <p class="card-text">Mininum Stay:&nbsp;&nbsp;${room.min_stay}</p>
+                            <p class="card-text">Maximum Stay:&nbsp;&nbsp;${room.max_stay}</p>
+                            <p class="card-text">Floor Size:&nbsp;&nbsp;${room.floor_size}</p>
+                            <p class="card-text"><i class="fa-solid fa-bed pe-2" style="color: #448c74;"></i>${room.bedQty}</p>
+                            <p class="card-text fw-bolder"><i class="fa-solid fa-house-circle-exclamation pe-2" style="color: #3c8c74;"></i>Amenities</p>
                             <p class="card-text">${badgesHtml}</p>
-                            <p class="card-text">Property Name: ${room.property_name}</p>
               <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoom" onclick="editRoom(${room.room_id})">Edit</button>
                             <button class="btn btn-outline-danger" onclick="confirmRoomDelete(${room.room_id})">Delete</button>
                         </div>
@@ -479,10 +503,9 @@ $(document).ready(function () {
   }
   // Save changes button inside the modal
   $("#editRoom").on("hidden.bs.modal", function () {
-    // Clear the form when the modal is closed
     $("#edit_room_form")[0].reset();
   });
-
+  // Updating the Room
   $("#edit_room_form").submit(function (event) {
     event.preventDefault();
 
@@ -491,16 +514,21 @@ $(document).ready(function () {
       url: "php/actions.php",
       data: $(this).serialize() + "&action=updateRoom",
       success: function (response) {
-        console.log(response); // Log the response to the console
-
         let res = JSON.parse(response);
 
         if (res.status == 200) {
-          alert(res.message);
+          Swal.fire({
+            title: "Changes updated!",
+            icon: "success",
+          });
           // Refresh the displayed properties after updating
+          $("#editRoom").modal("hide");
           $("#displayRoomBtn").trigger("click");
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -516,7 +544,6 @@ $(document).ready(function () {
     success: function (response) {
       let res = JSON.parse(response);
       if (res.status == 200) {
-        // Populate the dropdown with property names
         let propertyDropdown = $("#house_name");
         propertyDropdown.empty();
         $.each(res.data, function (index, property) {
@@ -534,15 +561,13 @@ $(document).ready(function () {
   });
   // Event listener for house dropdown change
   $("#house_name").on("change", function () {
-    // Trigger the displayRoomBtn click event when the house selection changes
     $("#displayRoomBtn").trigger("click");
   });
   $("#displayRoomBtn").click(function () {
-    // Get the selected property and house
     let selectedProperty = $("#property_name").val();
     let selectedHouse = $("#house_name").val();
 
-    // Send an AJAX request to fetch and display rooms for the selected property and house
+    //AJAX request to fetch and display rooms for the selected property and house
     $.ajax({
       url: "php/actions.php",
       type: "POST",
@@ -554,7 +579,6 @@ $(document).ready(function () {
       },
       success: function (response) {
         if (response.status === 200) {
-          // Rooms fetched successfully
           displayRoomCards(response.data);
         } else {
           displayNoRoomMessage();
@@ -566,26 +590,24 @@ $(document).ready(function () {
     });
   });
 
-  // $.ajax({
-  //   type: "GET",
-  //   url: "php/imageactions.php", // Replace with the correct path to your PHP file
-  //   success: function (data) {
-  //     // Inject the fetched content into the tab
-  //     $("#tab-5").html(data);
-  //   },
-  //   error: function (err) {
-  //     console.log(err);
-  //   },
-  // });
   //end of document ready
 });
 
 //outside document ready
 function confirmDelete(houseId) {
-  if (confirm("Are you sure you want to delete this property?")) {
-    // If the user confirms, delete the property
-    deleteProperty(houseId);
-  }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteProperty(houseId);
+    }
+  });
 }
 
 function deleteProperty(houseId) {
@@ -596,11 +618,17 @@ function deleteProperty(houseId) {
     success: function (response) {
       let res = JSON.parse(response);
       if (res.status == 200) {
-        alert(res.message);
+        Swal.fire({
+          title: "Property deleted!",
+          icon: "success",
+        });
         // Refresh the displayed properties after updating
         $("#displayPropertiesBtn").trigger("click");
       } else {
-        alert("Error: " + res.message);
+        Swal.fire({
+          title: res.message,
+          icon: "success",
+        });
       }
     },
     error: function (error) {
@@ -669,7 +697,6 @@ function editRoom(roomId) {
         $("#edit_room_form input[name='rent_per_day']").val(
           property.rent_per_day
         );
-        displayRoomImages(room.images);
 
         $("#editRoom").modal("show");
       } else {
@@ -682,10 +709,20 @@ function editRoom(roomId) {
   });
 }
 function confirmRoomDelete(roomID) {
-  if (confirm("Are you sure you want to delete this room?")) {
-    // If the user confirms, delete the property
-    deleteRoom(roomID);
-  }
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteRoom(roomID);
+        }
+      });
+
 }
 
 function deleteRoom(roomId) {
@@ -696,11 +733,17 @@ function deleteRoom(roomId) {
     success: function (response) {
       let res = JSON.parse(response);
       if (res.status == 200) {
-        alert(res.message);
+         Swal.fire({
+           title: "Room deleted!",
+           icon: "success",
+         });
         // Refresh the displayed properties after updating
         $("#displayRoomBtn").trigger("click");
       } else {
-        alert("Error: " + res.message);
+        Swal.fire({
+          title: "Room deleted!",
+          icon: "error",
+        });
       }
     },
     error: function (error) {

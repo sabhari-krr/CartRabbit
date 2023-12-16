@@ -21,7 +21,6 @@ body {
   transition: 1s;
   border: solid 1px;
   outline-color: #448c74;
-  border-radius: 48px;
 }
 
 /* @media (max-width: 991px) {

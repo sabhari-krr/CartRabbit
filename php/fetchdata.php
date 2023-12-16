@@ -83,6 +83,7 @@ function uploadImages($owner_id)
         }
 
         respond(200, 'Images uploaded successfully.');
+        
     } else {
         respond(400, 'No images selected for upload.');
     }
@@ -98,7 +99,6 @@ function respond($status, $message)
     ];
     echo json_encode($response);
     exit();
-    error_log('Reached this point: ' . __LINE__);
 }
 function fetchImages($owner_id, $room_id)
 {

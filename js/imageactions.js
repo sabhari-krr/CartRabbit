@@ -52,8 +52,10 @@ $(document).ready(function () {
         filename: filename,
       },
       success: function (response) {
-        console.log(response);
-        // Update the displayed images after deletion
+        Swal.fire({
+          title: "Image deleted!",
+          icon: "success",
+        });
         $("#propertySelect").change();
       },
       error: function (err) {
@@ -75,13 +77,15 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       success: function (response) {
-        console.log(response);
-
         let res = JSON.parse(response);
 
         if (res.status == 200) {
-          alert(res.message);
-          // You can refresh the room names here if needed
+          Swal.fire({
+            title: "Image uploaded!",
+            icon: "success",
+          });
+          $("#propertySelect").change();
+          $("#addPics")[0].reset();
         } else {
           alert("Error: " + res.message);
         }

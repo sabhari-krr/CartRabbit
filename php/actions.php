@@ -100,7 +100,6 @@ function addPropertyRequest()
             'message' => 'Property added successfully.'
         ];
         echo json_encode($response);
-        // return;
     } else {
         // Registration failed
         $response = [
