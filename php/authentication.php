@@ -138,7 +138,6 @@ function loginOwner()
 }
 function resetPasswordRequest()
 {
-    echo 1;
     global $db;
     $email = mysqli_real_escape_string($db, $_POST['email']);
     // $email="sabhari.a.krr@gmail.com";
@@ -231,8 +230,7 @@ EOT;
                 ];
                 echo json_encode($res);
             }
-            // Query executed successfully and at least one row was affected
-            echo "Token generated and updated successfully. Message sent, please check your inbox";
+            
         } elseif ($affectedRows === 0) {
             // No rows were affected (email not found)
             echo "Email not found. No rows were updated.";

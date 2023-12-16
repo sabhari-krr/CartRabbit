@@ -94,9 +94,20 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         $("#pwd_reset_request_form")[0].reset();
         if (res.status == 200) {
-          alert(res.message);
+          Swal.fire({
+            title: "Email delivered",
+            text: "Check your mailbox",
+            icon: "success",
+          });
+          $("#pwdresetmodal").modal("hide");
+
         } else {
-          alert("Error: " + res.message);
+          // alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "warning",
+          });
         }
       },
       error: function (error) {
