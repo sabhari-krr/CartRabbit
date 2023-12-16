@@ -89,10 +89,20 @@ $(document).ready(function () {
       success: function (response) {
         let res = JSON.parse(response);
         if (res.status == 200) {
-          alert(res.message);
-          window.location.href = "index.html";
+          Swal.fire({
+            title: "Success!",
+            text: "Logged out!",
+            icon: "success",
+            didClose: () => {
+              window.location.href = "index.html";
+            },
+          });
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "warning",
+          });
         }
       },
       error: function (error) {
@@ -104,4 +114,3 @@ $(document).ready(function () {
 });
 
 //out of document ready
-// Function to check login status

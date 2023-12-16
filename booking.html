@@ -21,12 +21,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- Custom js -->
-    <script src="js/actions.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/country-states.js"></script>
-    <script src="js/imageactions.js"></script>
+    <script src="js/customer_actions.js"></script>
     <script src="js/bookings.js"></script>
-
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,22 +33,119 @@
     <style>
         .displayContainer {
             background-color: antiquewhite;
+            border-radius: 24px;
 
         }
+
+        body {
+            background-color: #448c74;
+            font-family: "Poppins", sans-serif;
+        }
+
+
+        .btn-custom {
+            background-color: #448c74;
+            color: white;
+            transition: .5s;
+        }
+
+        .btn-custom:hover,
+        .btn-custom:focus {
+            background-color: white;
+            color: #448c74;
+            transition: .5s;
+            border: solid 1px;
+            outline-color: #448c74;
+        }
     </style>
-    <!-- Include FullCalendar CSS and JS files -->
-    <link rel="stylesheet" href="fullcalendar/main.css" />
-    <script src="fullcalendar/main.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 </head>
 
-<body class="container">
-    <div class="displayContainer">
-         <div id="test"></div>
-         
+<body class="container d-grid align-content-center">
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">QuickBook</a>
+
+
+
+            <div class="navbar-nav">
+                <button id="logoutButton" class="btn btn-danger">Logout</button>
+
+            </div>
+        </div>
+    </nav>
+    <div class="my-5 "></div>
+    <div class="displayContainer p-3">
+        <div class="searchRooms">
+            <form id="fetch_room_form" class="mt-3">
+                <h2 class="text-center lead fw-bolder">Search Room</h2>
+                <div class="row">
+
+                    <div class="mb-3  col-sm-12 col-md-4">
+                        <label for="checkin" class="form-label">Check-in</label>
+                        <input type="date" class="form-control" name="checkin" required />
+                    </div>
+                    <div class="mb-3  col-sm-12 col-md-4">
+                        <label for="checkout" class="form-label">Check-out</label>
+                        <input type="date" class="form-control" name="checkout" required />
+                    </div>
+                    <div class="mb-3  col-sm-12 col-md-4">
+                        <label for="city" class="form-label">City</label>
+                        <select class="form-select" name="city" id="cityOptions" required>
+                            <!-- City options will be populated here using jQuery -->
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="text-center my-3">
+
+
+                    <button type="button" id="searchRooms" class="btn btn-custom text-center">
+                        <i class="fa-solid fa-magnifying-glass"></i>&nbsp;Search Rooms
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        <!-- Display of the dynamic contnet -->
+        <div id="roomResults" class="mx-2 p-3 bg-light rounded-5 mx-auto">
+            
+        </div>
+
     </div>
-    
+    <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Book Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="bookRoomForm">
+                        <!-- Add form fields for adult qty, children qty, check-in, check-out -->
+                        <label for="adultQty" class="form-label">Adults:</label>
+                        <input type="number" name="adultQty" id="adultQty" class="form-control" required>
+
+                        <label for="childrenQty" class="form-label">Children:</label>
+                        <input type="number" name="childrenQty" id="childrenQty" class="form-control" required>
+
+                        <label for="checkinModal" class="form-label">Check-in:</label>
+                        <input type="date" name="checkinModal" id="checkinModal" class="form-control" required>
+
+                        <label for="checkoutModal" class="form-label">Check-out:</label>
+                        <input type="date" name="checkoutModal" id="checkoutModal" class="form-control" required>
+                        <input type="hidden" name="roomId" id="roomIdInput">
+                        <div class="text-center my-2">
+                            <button type="submit" class="btn btn-custom">Book Room</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
