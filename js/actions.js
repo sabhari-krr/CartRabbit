@@ -248,7 +248,7 @@ $(document).ready(function () {
                 <div class="col-md-4 mb-4">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5 class="card-title fw-bolder" style="color: #3c8c74;">${property.property_name}</h5>
+                            <h5 class="card-title fw-bolder text-center" style="color: #3c8c74;">${property.property_name}</h5>
                             <p class="card-text fw-bolder"><i class="fa-solid fa-location-dot pe-2" style="color: #3c8c74;"></i>Address</p>
                             <p class="card-text">${property.address_line}</p>
                             <p class="card-text">${property.city},&nbsp;&nbsp;${property.state},&nbsp;&nbsp;${property.country}</p>
@@ -473,9 +473,9 @@ $(document).ready(function () {
         .join(" ");
       let cardHtml = `
                 <div class="col-md-4 mb-4">
-                    <div class="card">
+                    <div class="card shadow">
                         <div class="card-body">
-                        <h5 class="card-title fw-bolder" style="color: #3c8c74;">${room.room_name}</h5>
+                        <h5 class="card-title fw-bolder text-center" style="color: #3c8c74;">${room.room_name}</h5>
                         <p class="card-text"><i class="fa-solid fa-hotel pe-2" style="color: #448c74;"></i>${room.property_name}</p>
                             <p class="card-text"><i class="fa-solid fa-rupee-sign pe-2" style="color: #448c74;"></i>${room.rent_per_day}&nbsp;/day</p>
                             <p class="card-text">Mininum Stay:&nbsp;&nbsp;${room.min_stay}</p>
