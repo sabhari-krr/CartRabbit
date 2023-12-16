@@ -7,13 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $checkout = date('Y-m-d', strtotime($_POST['checkout']));
     $city = $_POST['city'] ?? '';
 
-    // Validate input (you may want to add more thorough validation)
+    // Validate input
     if (empty($checkin) || empty($checkout) || empty($city)) {
         echo "Invalid input. Please provide check-in date, check-out date, and city.";
         exit;
     }
 
-    // Construct SQL query to find available rooms
     $sql = "SELECT room.room_id, room.room_name, property.property_name
         FROM room
         INNER JOIN property ON room.house_id = property.house_id
@@ -38,14 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     mysqli_free_result($result);
     mysqli_stmt_close($stmt);
 
-    // Display results or "No rooms available" message
+    // Display results for "No rooms available" message
     if (empty($rooms)) {
         echo "<div class='text-center fw-bolder'>
         <p>No rooms available for the selected dates in $city.</p>
         </div>";
     } else {
         foreach ($rooms as $room) {
-            // Fetch additional information for each room
             $roomDetailsQuery = "SELECT amenities, rent_per_day, property.location
                          FROM room
                          INNER JOIN property ON room.house_id = property.house_id
@@ -122,6 +120,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 } else {
-    // Handle case where form data is not received
     echo "Invalid request.";
 }

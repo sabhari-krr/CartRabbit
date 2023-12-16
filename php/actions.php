@@ -112,8 +112,6 @@ function addPropertyRequest()
     // Close the statement 
     mysqli_stmt_close($addProperty);
 }
-// Need to call this in html for displaying the properties as of now called manually
-// displayProperty();
 function displayProperty()
 {
     global $db;
@@ -150,7 +148,6 @@ function displayProperty()
         echo json_encode($response);
         return;
     }
-    // Close the statement
     mysqli_stmt_close($stmt);
 }
 // Deletion of property
@@ -190,7 +187,6 @@ function deleteProperty()
                 echo json_encode($response);
             }
 
-            // Close the statement
             mysqli_stmt_close($deleteProperty);
         } else {
             // Property doesn't belong to the owner
@@ -383,48 +379,8 @@ function getPropertyNames()
     ];
     echo json_encode($res);
 }
-// Displaying rooms
-// displayRoom();
-// function displayRoom()
-// {
-//     global $db;
-//     $owner_id = $_SESSION['owner_id'];
-//     $query = "SELECT * FROM room WHERE owner_id = ?";
-//     $stmt = mysqli_prepare($db, $query);
-//     mysqli_stmt_bind_param($stmt, 's', $owner_id);
-//     if (mysqli_stmt_execute($stmt)) {
-//         $result = mysqli_stmt_get_result($stmt);
-//         if (mysqli_num_rows($result) > 0) {
-//             $response = [
-//                 'status' => 200,
-//                 'message' => 'Room fetched successfully.',
-//                 'data' => mysqli_fetch_all(
-//                     $result,
-//                     MYSQLI_ASSOC
-//                 )
-//             ];
-//             echo json_encode($response);
-//             return;
-//         } else {
-//             $response = [
-//                 'status' => 404,
-//                 'message' => 'No property found.'
-//             ];
-//             echo json_encode($response);
-//             return;
-//         }
-//     } else {
-//         $response = [
-//             'status' => 500,
-//             'message' => 'Property fetch failed. Please try again later.'
-//         ];
-//         echo json_encode($response);
-//         return;
-//     }
-//     // Close the statement
-//     mysqli_stmt_close($stmt);
-// }
-// displayRoom(getHouseNames());
+
+// displayRoom
 function displayRoom($property_name)
 {
     global $db;

@@ -136,7 +136,6 @@ function sendMail($customerEmail, $roomName, $propertyName, $checkinModal, $chec
                 </html>
             ";
 
-    // Set content-type header for sending HTML email
     try {
         $mail = require __DIR__ . "/mailer.php";
         $mail->addAddress($customerEmail);
@@ -144,10 +143,8 @@ function sendMail($customerEmail, $roomName, $propertyName, $checkinModal, $chec
         $mail->Body = $message;
 
         $mail->send();
-        // You can also log the success message for further investigation
-        // error_log("Email sent successfully to $customerEmail");
     } catch (Exception $e) {
         // You can also log the error message for further investigation
-        // error_log("Email error: " . $mail->ErrorInfo);
+        error_log("Email error: " . $mail->ErrorInfo);
     }
 }

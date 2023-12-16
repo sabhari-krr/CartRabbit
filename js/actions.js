@@ -100,7 +100,6 @@ $(document).ready(function () {
             icon: "success",
           });
           $("#pwdresetmodal").modal("hide");
-
         } else {
           // alert("Error: " + res.message);
           Swal.fire({
@@ -288,7 +287,6 @@ $(document).ready(function () {
   }
   // Save changes button inside the modal
   $("#staticBackdrop").on("hidden.bs.modal", function () {
-    // Clear the form when the modal is closed
     $("#edit_property_form")[0].reset();
   });
   // Updating the property
@@ -324,7 +322,6 @@ $(document).ready(function () {
   });
   // Function to refresh thelist after adding the property
   function refreshList() {
-    // console.log("Called for refreshing list");
     //This ajax fetches the property list
     $.ajax({
       type: "POST",
@@ -600,8 +597,9 @@ $(document).ready(function () {
       },
     });
   });
-
-  //end of document ready
+  // ------------------------------
+  // ROOM SECTION END
+  // ------------------------------
 });
 
 //outside document ready

@@ -330,7 +330,6 @@ function loginCustomer()
                 'status' => 200,
                 'message' => 'Login successful',
                 'guest_id' => $user['guest_id']
-                // Add additional data if needed
             ];
             echo json_encode($response);
         } else {

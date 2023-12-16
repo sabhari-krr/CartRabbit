@@ -23,13 +23,6 @@ body {
   outline-color: #448c74;
 }
 
-/* @media (max-width: 991px) {
-  
-  .right {
-    width: 100%;
-  }
-} */
-
 @media (max-width: 768px) {
   .left {
     display: none;
@@ -45,5 +38,5 @@ body {
   }
 }
 body.swal2-shown {
-  overflow-y: hidden !important; /* Override SweetAlert styles */
+  overflow-y: hidden !important;
 }

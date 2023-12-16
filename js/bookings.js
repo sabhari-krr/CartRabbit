@@ -14,7 +14,7 @@ $(document).ready(function () {
       console.log(err);
     },
   });
-  //   // Search rooms when the "Search Rooms" button is clicked
+  // Search rooms when the "Search Rooms" button is clicked
   $("#searchRooms").on("click", function () {
     // Get input values
     var checkin = $("input[name='checkin']").val();
@@ -25,7 +25,7 @@ $(document).ready(function () {
     // Perform room search
     $.ajax({
       type: "POST",
-      url: "php/search_rooms.php", // Replace with the actual PHP script for room search
+      url: "php/search_rooms.php", 
       data: { checkin: checkin, checkout: checkout, city: city },
       success: function (data) {
         $("#roomResults").html(data);
@@ -35,13 +35,12 @@ $(document).ready(function () {
       },
     });
   });
-  //   Booking
+  //   BOOKING SECTION
   $(document).on("click", ".book-btn", function () {
     // Get room ID from data attribute
     selectedRoomId = $(this).data("room-id");
     $("#checkinModal").val(selectedCheckin);
     $("#checkoutModal").val(selectedCheckout);
-    // var roomId = $(this).data("room-id");
 
     $("#roomIdInput").val(selectedRoomId);
     $("#bookModal").modal("show");
@@ -51,19 +50,16 @@ $(document).ready(function () {
   $("#bookRoomForm").submit(function (e) {
     e.preventDefault();
 
-    // Ensure that selectedRoomId is defined before proceeding
     if (typeof selectedRoomId !== "undefined") {
       var roomId = selectedRoomId;
       var formData = $(this).serialize() + "&roomId=" + roomId;
 
-      // Make an AJAX request to handle the booking process
       $.ajax({
         type: "POST",
-        url: "php/book_room.php", // Replace with the actual PHP file to handle the booking
+        url: "php/book_room.php", 
         data: formData,
-        dataType: "json", // Expect JSON response
+        dataType: "json", 
         success: function (response) {
-          // Handle the response (success or error)
           if (response.success) {
             // Booking successful
             Swal.fire({
