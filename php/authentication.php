@@ -140,7 +140,6 @@ function resetPasswordRequest()
 {
     global $db;
     $email = mysqli_real_escape_string($db, $_POST['email']);
-    // $email="sabhari.a.krr@gmail.com";
     $token = bin2hex(random_bytes(16));
     $token_hash = hash("sha256", $token);
     $expiry = date("Y-m-d H:i:s", time() + 60 * 30);

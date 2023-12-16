@@ -57,7 +57,7 @@ $(document).ready(function () {
             text: "Logged In!",
             icon: "success",
             didClose: () => {
-              window.location.href = "https://www.github.com/sabhari-krr/";
+              window.location.href = "booking.html";
             },
           });
         } else if (res.status == 404) {
@@ -67,7 +67,6 @@ $(document).ready(function () {
             text: "User not found!",
             icon: "warning",
           });
-
         } else {
           Swal.fire({
             title: "Oops!",
