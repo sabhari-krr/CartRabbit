@@ -1,0 +1,18 @@
+body {
+  background-color: #448c74;
+  font-family: "Poppins", sans-serif;
+}
+.btn-custom {
+  background-color: #448c74;
+  color: white;
+  transition: 1s;
+}
+.btn-custom:hover,
+.btn-custom:focus {
+  background-color: white;
+  color: #448c74;
+  transition: 1s;
+  border: solid 1px;
+  outline-color: #448c74;
+  border-radius: 48px;
+}

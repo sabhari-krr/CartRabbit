@@ -9,11 +9,27 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         $("#cust_reg_form")[0].reset();
         if (res.status == 200) {
-          alert(res.message);
-        } else if (res.status == 409) {
-          alert(res.message);
+          // alert(res.message);
+          Swal.fire({
+            title: "Success!",
+            text: "Registered!",
+            icon: "success",
+          });
+          $("#customer_login_trigger").trigger("click");
+        } else if (res.status == 409 || res.status == 422) {
+          // alert(res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "warning",
+          });
         } else {
-          alert("Error: " + res.message);
+          // alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oh uh!",
+            text: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -32,14 +48,32 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         $("#owner_login_form")[0].reset();
         if (res.status == 200) {
-          alert(res.message);
-          document.cookie = "guest_id=" + res.guest_id;
-          window.location.href = "rooms.html";
-          console.log(res);
-        } else if (res.status == 401) {
-          alert(res.message);
+          // alert(res.message);
+          // document.cookie = "guest_id=" + res.guest_id;
+          // window.location.href = "rooms.html";
+          // console.log(res);
+          Swal.fire({
+            title: "Success!",
+            text: "Logged In!",
+            icon: "success",
+            didClose: () => {
+              window.location.href = "https://www.github.com/sabhari-krr/";
+            },
+          });
+        } else if (res.status == 404) {
+          // alert(res.message);
+          Swal.fire({
+            title: "Oh uh!",
+            text: "User not found!",
+            icon: "warning",
+          });
+
         } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: "Wrong Password!",
+            icon: "warning",
+          });
         }
       },
       error: function (error) {

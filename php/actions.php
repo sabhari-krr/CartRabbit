@@ -36,9 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action'])) {
             break;
 
         case 'displayRoom':
-            // $property_name = $_POST['house_name'];
-            // displayRoom($property_name);\
-            displayRoom();
+            $property_name = $_POST['house_name'];
+            displayRoom($property_name);
+            // displayRoom();
             break;
         case 'getRoomDetails':
             getRoomDetails();
@@ -386,56 +386,13 @@ function getPropertyNames()
 }
 // Displaying rooms
 // displayRoom();
-function displayRoom()
-{
-    global $db;
-    $owner_id = $_SESSION['owner_id'];
-    $query = "SELECT * FROM room WHERE owner_id = ?";
-    $stmt = mysqli_prepare($db, $query);
-    mysqli_stmt_bind_param($stmt, 's', $owner_id);
-    if (mysqli_stmt_execute($stmt)) {
-        $result = mysqli_stmt_get_result($stmt);
-        if (mysqli_num_rows($result) > 0) {
-            $response = [
-                'status' => 200,
-                'message' => 'Room fetched successfully.',
-                'data' => mysqli_fetch_all(
-                    $result,
-                    MYSQLI_ASSOC
-                )
-            ];
-            echo json_encode($response);
-            return;
-        } else {
-            $response = [
-                'status' => 404,
-                'message' => 'No property found.'
-            ];
-            echo json_encode($response);
-            return;
-        }
-    } else {
-        $response = [
-            'status' => 500,
-            'message' => 'Property fetch failed. Please try again later.'
-        ];
-        echo json_encode($response);
-        return;
-    }
-    // Close the statement
-    mysqli_stmt_close($stmt);
-}
-// displayRoom(getHouseNames());
-// function displayRoom($property_name)
+// function displayRoom()
 // {
 //     global $db;
 //     $owner_id = $_SESSION['owner_id'];
-
-//     // Add filters for property_name and house_name
-//     $query = "SELECT * FROM room WHERE owner_id = ? AND property_name = ?";
+//     $query = "SELECT * FROM room WHERE owner_id = ?";
 //     $stmt = mysqli_prepare($db, $query);
-//     mysqli_stmt_bind_param($stmt, 'ss', $owner_id, $property_name);
-
+//     mysqli_stmt_bind_param($stmt, 's', $owner_id);
 //     if (mysqli_stmt_execute($stmt)) {
 //         $result = mysqli_stmt_get_result($stmt);
 //         if (mysqli_num_rows($result) > 0) {
@@ -452,7 +409,7 @@ function displayRoom()
 //         } else {
 //             $response = [
 //                 'status' => 404,
-//                 'message' => 'No rooms found for the selected property and house.'
+//                 'message' => 'No property found.'
 //             ];
 //             echo json_encode($response);
 //             return;
@@ -460,15 +417,58 @@ function displayRoom()
 //     } else {
 //         $response = [
 //             'status' => 500,
-//             'message' => 'Room fetch failed. Please try again later.'
+//             'message' => 'Property fetch failed. Please try again later.'
 //         ];
 //         echo json_encode($response);
 //         return;
 //     }
-
 //     // Close the statement
 //     mysqli_stmt_close($stmt);
 // }
+// displayRoom(getHouseNames());
+function displayRoom($property_name)
+{
+    global $db;
+    $owner_id = $_SESSION['owner_id'];
+
+    // Add filters for property_name and house_name
+    $query = "SELECT * FROM room WHERE owner_id = ? AND property_name = ?";
+    $stmt = mysqli_prepare($db, $query);
+    mysqli_stmt_bind_param($stmt, 'ss', $owner_id, $property_name);
+
+    if (mysqli_stmt_execute($stmt)) {
+        $result = mysqli_stmt_get_result($stmt);
+        if (mysqli_num_rows($result) > 0) {
+            $response = [
+                'status' => 200,
+                'message' => 'Room fetched successfully.',
+                'data' => mysqli_fetch_all(
+                    $result,
+                    MYSQLI_ASSOC
+                )
+            ];
+            echo json_encode($response);
+            return;
+        } else {
+            $response = [
+                'status' => 404,
+                'message' => 'No rooms found for the selected property and house.'
+            ];
+            echo json_encode($response);
+            return;
+        }
+    } else {
+        $response = [
+            'status' => 500,
+            'message' => 'Room fetch failed. Please try again later.'
+        ];
+        echo json_encode($response);
+        return;
+    }
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
+}
 // Getting room filler details for editing
 function getRoomDetails()
 {

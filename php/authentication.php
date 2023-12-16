@@ -61,7 +61,7 @@ function registerOwner()
             // Email already exists
             $response = [
                 'status' => 409,
-                'message' => 'Email already exists, please choose another one.'
+                'message' => 'Email already exists, please login.'
             ];
             echo json_encode($response);
         } else {
@@ -120,7 +120,7 @@ function loginOwner()
             $_SESSION['owner_id'] = $user['id'];
             $response = [
                 'status' => 200,
-                'message' => 'Login successful.....',
+                'message' => 'Login successful',
                 'owner_id' => $user['id']
                 // Add additional data if needed
             ];
@@ -272,7 +272,7 @@ function registerCustomer()
             // Email already exists
             $response = [
                 'status' => 409,
-                'message' => 'Email already exists, please choose another one.'
+                'message' => 'Email already exists, please login.'
             ];
             echo json_encode($response);
         } else {
@@ -331,7 +331,7 @@ function loginCustomer()
             $_SESSION['guest_id'] = $user['guest_id'];
             $response = [
                 'status' => 200,
-                'message' => 'Login successful.....',
+                'message' => 'Login successful',
                 'guest_id' => $user['guest_id']
                 // Add additional data if needed
             ];

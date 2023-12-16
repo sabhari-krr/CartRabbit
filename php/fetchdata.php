@@ -113,7 +113,7 @@ function fetchImages($owner_id, $room_id)
         $imageFilenames = explode(',', $row['images']);
 
         foreach ($imageFilenames as $filename) {
-            $imageUrl = "../assets/room_images/" . $filename;
+            $imageUrl = "assets/room_images/" . $filename;
             $imageHtml .= '<div class="card m-2 h-50" style="width: 18rem;">'; // Bootstrap card
             $imageHtml .= '<img src="' . $imageUrl . '" class="card-img-top img-thumbnail h-50" style="object-fit:cover" alt="Image">';
             $imageHtml .= '<div class="card-body">';

@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  // ------------------------------
+  // START OF OWNER REG & LOGIN
+  // ------------------------------
   // Owner Registration Ajax
   $("#owner_reg_form").submit(function (event) {
     event.preventDefault();
@@ -10,11 +13,27 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         $("#owner_reg_form")[0].reset();
         if (res.status == 200) {
-          alert(res.message);
+          // alert(res.message);
+          Swal.fire({
+            title: "Success!",
+            text: "Registered!",
+            icon: "success",
+          });
+          $("#owner_login_trigger").trigger("click");
         } else if (res.status == 409) {
-          alert(res.message);
+          // alert(res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: res.message,
+            icon: "warning",
+          });
         } else {
-          alert("Error: " + res.message);
+          // alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oh uh!",
+            text: res.message,
+            icon: "error",
+          });
         }
       },
       error: function (error) {
@@ -33,13 +52,31 @@ $(document).ready(function () {
         let res = JSON.parse(response);
         $("#owner_login_form")[0].reset();
         if (res.status == 200) {
-          alert(res.message);
-          window.location.href = "dashboard.html";
-          console.log(res);
+          // alert(res.message);
+          Swal.fire({
+            title: "Success!",
+            text: "Logged In!",
+            icon: "success",
+            didClose: () => {
+              window.location.href = "dashboard.html";
+            },
+          });
+
+          // console.log(res);
         } else if (res.status == 401) {
-          alert(res.message);
-        } else {
-          alert("Error: " + res.message);
+          Swal.fire({
+            title: "Oops!",
+            text: "Wrong Password",
+            icon: "warning",
+          });
+        } else if (res.status == 404) {
+          Swal.fire({
+            title: "Oh uh!",
+            text: "User not found!",
+            icon: "error",
+          });
+
+          // alert("Error: " + res.message);
         }
       },
       error: function (error) {
@@ -89,6 +126,49 @@ $(document).ready(function () {
       },
     });
   });
+  // ------------------------------
+  // END OF OWNER REG & LOGIN
+  // ------------------------------
+  // ------------------------------
+  // NAVIGATION BEHAVIOUR START
+  // ------------------------------
+  $("#tab-1").show();
+  $("#tab-2,#tab-3,#tab-4,#tab-5").hide();
+
+  $("#tab-trigger-1").click(function () {
+    $("#tab-1").show("slow");
+    $("#tab-2,#tab-3,#tab-4,#tab-5").hide("slow");
+
+    $(".navbar-toggler").click();
+  });
+  $("#tab-trigger-2").click(function () {
+    $("#tab-2").show("slow");
+    $("#tab-1,#tab-3,#tab-4,#tab-5").hide("slow");
+
+    $(".navbar-toggler").click();
+    $("#displayPropertiesBtn").trigger("click");
+  });
+  $("#tab-trigger-3").click(function () {
+    $("#tab-3").show("slow");
+    $("#tab-1,#tab-2,#tab-4,#tab-5").hide("slow");
+    $(".navbar-toggler").click();
+  });
+  $("#tab-trigger-4").click(function () {
+    $("#tab-4").show("slow");
+    $("#tab-1,#tab-2,#tab-3,#tab-5").hide("slow");
+    $(".navbar-toggler").click();
+    refreshList();
+    $("#displayRoomBtn").trigger("click");
+  });
+  $("#tab-trigger-5").click(function () {
+    $("#tab-5").show("slow");
+    $("#tab-1,#tab-2,#tab-3,#tab-4").hide("slow");
+    $(".navbar-toggler").click();
+    refreshList();
+  });
+  // ------------------------------
+  // NAVIGATION BEHAVIOUR END
+  // ------------------------------
   // Propertry Registration Form
   $("#add_property_form").submit(function (event) {
     event.preventDefault();
@@ -104,6 +184,7 @@ $(document).ready(function () {
           alert(res.message);
           // Refresh the displayed properties after updating
           $("#displayPropertiesBtn").trigger("click");
+          refreshList();
         } else {
           alert("Error: " + res.message);
         }
@@ -114,7 +195,6 @@ $(document).ready(function () {
     });
   });
   // Propertry Showcase part
-  // fetchProperties();
   $("#displayPropertiesBtn").click(function () {
     // Send an AJAX request to fetch and display properties
     $.ajax({
@@ -207,6 +287,70 @@ $(document).ready(function () {
       },
     });
   });
+  // Function to refresh thelist after adding the property
+  function refreshList() {
+    console.log("Called for refreshing list");
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php",
+      data: { action: "getPropertyNames" },
+      success: function (response) {
+        let res = JSON.parse(response);
+        if (res.status == 200) {
+          // Populate the dropdown with property names
+          let propertyDropdown = $("#property_name");
+          propertyDropdown.empty();
+          $.each(res.data, function (index, property) {
+            propertyDropdown.append(
+              $("<option></option>").val(property).html(property)
+            );
+          });
+        } else {
+          alert("Error fetching property names: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+    $.ajax({
+      type: "POST",
+      url: "php/actions.php",
+      data: { action: "getHouseNames" },
+      success: function (response) {
+        let res = JSON.parse(response);
+        if (res.status == 200) {
+          // Populate the dropdown with property names
+          let propertyDropdown = $("#house_name");
+          propertyDropdown.empty();
+          $.each(res.data, function (index, property) {
+            propertyDropdown.append(
+              $("<option></option>").val(property).html(property)
+            );
+          });
+        } else {
+          alert("Error fetching property names: " + res.message);
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      },
+    });
+    $.ajax({
+      type: "POST",
+      url: "php/fetchdata.php",
+      data: {
+        action: "fetchRooms", // Specify the action
+      },
+      success: function (data) {
+        // Populate the dropdown with fetched room names
+        $("#propertySelect").html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      },
+    });
+  }
   // Room Adding form ajax
   $("#room_add_form").submit(function (event) {
     event.preventDefault();
@@ -226,9 +370,6 @@ $(document).ready(function () {
           $("#room_add_form")[0].reset();
           alert(res.message);
           $("#displayRoomBtn").trigger("click");
-
-          // Refresh the displayed properties after updating
-          // $("#displayPropertiesBtn").trigger("click");
         } else {
           alert("Error: " + res.message);
         }
@@ -409,7 +550,7 @@ $(document).ready(function () {
       data: {
         action: "displayRoom",
         // property_name: selectedProperty,
-        // house_name: selectedHouse,
+        house_name: selectedHouse,
       },
       success: function (response) {
         if (response.status === 200) {
@@ -425,6 +566,17 @@ $(document).ready(function () {
     });
   });
 
+  // $.ajax({
+  //   type: "GET",
+  //   url: "php/imageactions.php", // Replace with the correct path to your PHP file
+  //   success: function (data) {
+  //     // Inject the fetched content into the tab
+  //     $("#tab-5").html(data);
+  //   },
+  //   error: function (err) {
+  //     console.log(err);
+  //   },
+  // });
   //end of document ready
 });
 
@@ -517,7 +669,7 @@ function editRoom(roomId) {
         $("#edit_room_form input[name='rent_per_day']").val(
           property.rent_per_day
         );
-                displayRoomImages(room.images);
+        displayRoomImages(room.images);
 
         $("#editRoom").modal("show");
       } else {
@@ -528,7 +680,6 @@ function editRoom(roomId) {
       console.error("Error fetching property details:", error);
     },
   });
-  
 }
 function confirmRoomDelete(roomID) {
   if (confirm("Are you sure you want to delete this room?")) {

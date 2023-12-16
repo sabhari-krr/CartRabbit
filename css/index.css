@@ -45,3 +45,6 @@ body {
     width: 100% !important;
   }
 }
+body.swal2-shown {
+  overflow-y: hidden !important; /* Override SweetAlert styles */
+}
