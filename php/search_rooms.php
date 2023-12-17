@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $checkinDate = new DateTime($checkin);
             $checkoutDate = new DateTime($checkout);
             $stayDuration = $checkinDate->diff($checkoutDate)->days;
-            $totalRent = $rentPerDay * $stayDuration;
+            $totalRent = $rentPerDay * ($stayDuration+1);
             $amenitiesArray = explode(',', $amenities);
 
             // Create HTML for badges

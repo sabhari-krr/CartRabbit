@@ -25,8 +25,9 @@ $(document).ready(function () {
     // Perform room search
     $.ajax({
       type: "POST",
-      url: "php/search_rooms.php", 
+      url: "php/search_rooms.php",
       data: { checkin: checkin, checkout: checkout, city: city },
+
       success: function (data) {
         $("#roomResults").html(data);
       },
@@ -53,12 +54,27 @@ $(document).ready(function () {
     if (typeof selectedRoomId !== "undefined") {
       var roomId = selectedRoomId;
       var formData = $(this).serialize() + "&roomId=" + roomId;
-
+      // Show loader before AJAX request
+      Swal.fire({
+        title: "Booking in progress",
+        html: `
+          <div>
+            <p style="margin-bottom: 10px;">Please wait...</p>
+            <img src="assets/site_assets/loader.svg" style="width: 100px; height: 100px;" alt="Loading...">
+          </div>
+        `,
+        allowOutsideClick: false,
+        showCancelButton: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+          Swal.showLoading();
+        },
+      });
       $.ajax({
         type: "POST",
-        url: "php/book_room.php", 
+        url: "php/book_room.php",
         data: formData,
-        dataType: "json", 
+        dataType: "json",
         success: function (response) {
           if (response.success) {
             // Booking successful
@@ -77,6 +93,8 @@ $(document).ready(function () {
           }
         },
         error: function (err) {
+          Swal.close();
+
           console.log(err);
         },
       });
