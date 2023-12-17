@@ -68,9 +68,12 @@ git clone https://github.com/yourusername/guest-room-booking.git
 4. **Room Management**
 - Owners can add rooms, set maximum stay limits, view rooms, and delete them. Photos can be uploaded and viewed for each room.
 # Owner Walkthrough
-## This video provides an overview Owner registration and Operations:
+### This video provides an overview Owner registration and Operations:
 
 [![Owner registration and operations](https://img.youtube.com/vi/YLvDLvebZiw/hqdefault.jpg)](https://www.youtube.com/watch?v=YLvDLvebZiw)
+
+### This video provides an overview Password reset for Owner:
+[![Password Reset](https://img.youtube.com/vi/VDbNrdm-uzE/hqdefault.jpg)](https://www.youtube.com/watch?v=VDbNrdm-uzE)
 
 ### Customer Module
 1. **Registration and Sign In**
@@ -87,3 +90,7 @@ git clone https://github.com/yourusername/guest-room-booking.git
   
 ### Geodata REST API
 - The application uses a Geodata REST API to dynamically populate country, state, and city options in the registration and booking forms.
+- 
+### This video provides an overview Customer registration and booking:
+[![Booking video](https://img.youtube.com/vi/w3hViciShrM/hqdefault.jpg)](https://www.youtube.com/watch?v=w3hViciShrM)
+
