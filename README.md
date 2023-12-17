@@ -42,44 +42,44 @@ $mail->Port = 587;
 git clone https://github.com/yourusername/guest-room-booking.git
 ```
 2. **Move the project folder:**
---Move the project folder to the htdocs directory in your XAMPP installation.
+- Move the project folder to the htdocs directory in your XAMPP installation.
 
 3. **Update Database Configuration:**
---Open config.php and update the database connection details.
+- Open config.php and update the database connection details.
 
 4. **Create database**
---Use the name mentioned in the cofig as db name and then find the db schema inside the db folder.
---Import it into the database.
+- Use the name mentioned in the cofig as db name and then find the db schema inside the db folder.
+- Import it into the database.
 
 6. **Access the Application:**
---Open a web browser and navigate to http://localhost/cartrabbit.
+- Open a web browser and navigate to http://localhost/cartrabbit.
 
 ## Work Flow
 ### Owner Module
-- **Registration and Sign In**
--- Owners can register and sign in to manage their properties.
+1. **Registration and Sign In**
+- Owners can register and sign in to manage their properties.
 
-- **Forgot Password**
--- Owners can reset their password by providing their email. PHP Mailer is used to send password reset emails.
+2. **Forgot Password**
+- Owners can reset their password by providing their email. PHP Mailer is used to send password reset emails.
 
-- **Property Management**
--- Owners can register properties, view property details, and edit property information. Google Map links are collected for property locations.
+3. **Property Management**
+- Owners can register properties, view property details, and edit property information. Google Map links are collected for property locations.
 
-- **Room Management**
--- Owners can add rooms, set maximum stay limits, view rooms, and delete them. Photos can be uploaded and viewed for each room.
+4. **Room Management**
+- Owners can add rooms, set maximum stay limits, view rooms, and delete them. Photos can be uploaded and viewed for each room.
 
 ### Customer Module
-- **Registration and Sign In**
--- Customers can register and sign in to book rooms.
+1. **Registration and Sign In**
+- Customers can register and sign in to book rooms.
 
-- **Room Booking**
--- Customers can select check-in and check-out dates along with the city to view available rooms. They can then select and book a room.
+2. **Room Booking**
+- Customers can select check-in and check-out dates along with the city to view available rooms. They can then select and book a room.
 
-- **Booking Validation**
--- Customers are warned if their selected date range exceeds the maximum stay limit for the room.
+3. **Booking Validation**
+- Customers are warned if their selected date range exceeds the maximum stay limit for the room.
 
-- **Booking Confirmation**
--- Upon successful booking, customers receive an email with room details, booking dates, and property location for easy navigation.
+4. **Booking Confirmation**
+- Upon successful booking, customers receive an email with room details, booking dates, and property location for easy navigation.
   
 ### Geodata REST API
--- The application uses a Geodata REST API to dynamically populate country, state, and city options in the registration and booking forms.
+- The application uses a Geodata REST API to dynamically populate country, state, and city options in the registration and booking forms.
