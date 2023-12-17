@@ -49,7 +49,7 @@ git clone https://github.com/yourusername/guest-room-booking.git
 
 4. **Create database**
 - Use the name mentioned in the cofig as db name and then find the db schema inside the db folder.
-- Import it into the database. *** IT HAS SAMPLE DATA, ALSO, IMAGES ARE AVAILABLE IN THE FOLDER assets/room_images ***
+- Import it into the database. ***IT HAS SAMPLE DATA, ALSO, IMAGES ARE AVAILABLE IN THE FOLDER assets/room_images***
 
 6. **Access the Application:**
 - Open a web browser and navigate to http://localhost/cartrabbit.
