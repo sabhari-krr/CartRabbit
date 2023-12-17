@@ -67,6 +67,7 @@ git clone https://github.com/yourusername/guest-room-booking.git
 
 4. **Room Management**
 - Owners can add rooms, set maximum stay limits, view rooms, and delete them. Photos can be uploaded and viewed for each room.
+> The video is published as a private playlist and have "unlisted" visibility. So, it is viewable only here as link is only mentioned here. So, its super duper private :+1:
 # Owner Walkthrough
 ### This video provides an overview Owner registration and Operations:
 
