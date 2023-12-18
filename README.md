@@ -9,7 +9,7 @@
 
 2. **Configure XAMPP:**
    - Start the Apache and MySQL services.
-   - Open phpMyAdmin and create a new database named `guest_booking`.
+   - Open phpMyAdmin and create a new database named `cartrabbit`.
 
 3. **Install Composer:**
    Download and install Composer from [here](https://getcomposer.org/).
