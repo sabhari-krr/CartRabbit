@@ -39,7 +39,7 @@ $mail->Port = 587;
 1. **Clone the repository:**
 
 ```bash
-[git clone https://github.com/sabhari-krr/CartRabbit.git](https://github.com/sabhari-krr/CartRabbit.git)
+git clone https://github.com/sabhari-krr/CartRabbit.git
 ```
 2. **Move the project folder:**
 - Move the project folder to the htdocs directory in your XAMPP installation.
